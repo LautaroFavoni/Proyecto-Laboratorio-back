@@ -6,12 +6,13 @@ import com.example.practicaClase.persintence.entities.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 
 @Entity
 public class Tenant extends User {
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "property_id")
     private Property property;
 

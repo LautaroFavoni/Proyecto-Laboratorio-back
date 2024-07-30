@@ -21,15 +21,20 @@ public abstract class Event {
     @JoinColumn(name = "property_id")
     private Property property;
 
+    @ManyToOne
+    @JoinColumn(name = "lanlord_id")
+    private Landlord landlord;
+
     // Constructors, Getters, Setters
 
     public Event() {
     }
 
-    public Event(String date, Tenant tenant, Property property) {
+    public Event(String date, Tenant tenant, Property property, Landlord landlord) {
         this.date = date;
         this.tenant = tenant;
         this.property = property;
+        this.landlord = landlord;
     }
 
     public Long getId() {

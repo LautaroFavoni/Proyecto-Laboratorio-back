@@ -21,7 +21,7 @@ public class Property {
     @JoinColumn(name = "landlord_id")
     private Landlord landlord;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;
 

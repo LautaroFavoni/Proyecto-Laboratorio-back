@@ -15,8 +15,8 @@ public class Payments extends Event {
     public Payments() {
     }
 
-    public Payments(String date, Tenant tenant, Property property, Double amount) {
-        super(date, tenant, property);
+    public Payments(String date, Tenant tenant, Property property, Landlord landlord, Double amount) {
+        super(date, tenant, property, landlord);
         this.amount = amount;
     }
 

@@ -15,8 +15,8 @@ public class Contract extends Event {
     public Contract() {
     }
 
-    public Contract(String date, Tenant tenant, Property property, String endDate) {
-        super(date, tenant, property);
+    public Contract(String date, Tenant tenant, Property property, Landlord landlord, String endDate) {
+        super(date, tenant, property,landlord);
         this.endDate = endDate;
     }
 

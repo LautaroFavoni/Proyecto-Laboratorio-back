@@ -17,9 +17,6 @@ public class Landlord extends User {
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
 
     // Getters and Setters
 
@@ -39,11 +36,5 @@ public class Landlord extends User {
         this.owner = owner;
     }
 
-    public Admin getAdmin() {
-        return admin;
-    }
 
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
 }
