@@ -1,10 +1,6 @@
 package com.example.practicaClase.persintence.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -24,7 +20,6 @@ public class Owner extends User {
     private Admin admin;
 
     // Getters and Setters
-
     public List<Property> getPropertyList() {
         return propertyList;
     }

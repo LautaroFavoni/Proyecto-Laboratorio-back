@@ -1,10 +1,6 @@
 package com.example.practicaClase.persintence.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,13 +9,12 @@ public class Landlord extends User {
     @OneToMany(mappedBy = "landlord")
     private List<Property> propertyList;
 
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-
     // Getters and Setters
-
     public List<Property> getPropertyList() {
         return propertyList;
     }
@@ -35,6 +30,4 @@ public class Landlord extends User {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
-
-
 }

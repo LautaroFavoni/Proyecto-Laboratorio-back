@@ -9,9 +9,7 @@ public class Admin extends User {
     @OneToMany(mappedBy = "admin")
     private List<Owner> ownerList;
 
-
     // Getters and Setters
-
     public List<Owner> getOwnerList() {
         return ownerList;
     }
@@ -19,6 +17,4 @@ public class Admin extends User {
     public void setOwnerList(List<Owner> ownerList) {
         this.ownerList = ownerList;
     }
-
-
 }

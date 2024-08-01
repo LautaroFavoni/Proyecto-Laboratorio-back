@@ -2,8 +2,6 @@ package com.example.practicaClase.persintence.entities;
 
 import jakarta.persistence.*;
 
-
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
@@ -13,13 +11,10 @@ public abstract class User {
     private Long id;
 
     private String name;
-
     private String password;
-
     private String role;
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }

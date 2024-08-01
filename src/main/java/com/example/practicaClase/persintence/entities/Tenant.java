@@ -1,13 +1,6 @@
 package com.example.practicaClase.persintence.entities;
 
-import com.example.practicaClase.persintence.entities.Owner;
-import com.example.practicaClase.persintence.entities.Property;
-import com.example.practicaClase.persintence.entities.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-
+import jakarta.persistence.*;
 
 @Entity
 public class Tenant extends User {
@@ -21,7 +14,6 @@ public class Tenant extends User {
     private Owner owner;
 
     // Getters and Setters
-
     public Property getProperty() {
         return property;
     }
