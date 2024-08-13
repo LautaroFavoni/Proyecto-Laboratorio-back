@@ -47,4 +47,14 @@ public class Property {
     public void setOwner(Owner owner) {
         this.owner = owner;
     }
+
+    public Landlord getLandlord() {
+        return landlord;
+    }
+
+    public void setLandlord(Landlord landlord) {
+        this.landlord = landlord;
+    }
 }
+
+
