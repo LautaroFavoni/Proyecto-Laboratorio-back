@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,9 +36,11 @@ public class TenantController {
         Owner owner = ownerRepository.findById(dto.getOwnerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
-        // Buscar Property por ID
-        Property property = propertyRepository.findById(dto.getPropertyId())
-                .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+        // Buscar Property por ID, permitiendo que la propiedad sea null
+        Property property = dto.getPropertyId() != null ?
+                propertyRepository.findById(dto.getPropertyId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Property not found")) :
+                null;
 
         // Crear el nuevo Tenant
         Tenant tenant = new Tenant();
@@ -50,11 +53,16 @@ public class TenantController {
         // Guardar el Tenant en la base de datos
         tenantRepository.save(tenant);
 
-        // Actualizar el Tenant en la Property y guardar
-        property.setTenant(tenant);
-        propertyRepository.save(property);
+        // Actualizar el Tenant en la Property y guardar si la Property no es null
+        if (property != null) {
+            property.setTenant(tenant);
+            propertyRepository.save(property);
+        }
 
-        // Agregar el Tenant a la lista de Tenants del Owner y actualizar el Owner
+        // Agregar el Tenant a la lista de Tenants del Owner, asegurando que la lista no sea null
+        if (owner.getTenantList() == null) {
+            owner.setTenantList(new ArrayList<>());
+        }
         owner.getTenantList().add(tenant);
         ownerRepository.save(owner);
 

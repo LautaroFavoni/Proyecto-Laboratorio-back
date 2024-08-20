@@ -12,6 +12,7 @@ public class Property {
     // Otros atributos de Property
 
     @OneToOne(mappedBy = "property")
+    @JoinColumn(name = "tenant_id")
     private Tenant tenant;
 
     @ManyToOne
