@@ -1,23 +1,22 @@
-package com.example.practicaClase.persintence.DTOs.Admin;
+package com.example.practicaClase.persintence.DTOs.Tenant;
 
-import java.util.List;
-
-public class AdminForCreation {
-
+public class TenantForCreation {
     private String name;
     private String password;
     private String role;
-    private List<Long> ownerIds;
+    private Long propertyId;
+    private Long ownerId;
 
     // Constructores
-    public AdminForCreation() {
+    public TenantForCreation() {
     }
 
-    public AdminForCreation(String name, String password, String role, List<Long> ownerIds) {
+    public TenantForCreation(String name, String password, String role, Long propertyId, Long ownerId) {
         this.name = name;
         this.password = password;
         this.role = role;
-        this.ownerIds = ownerIds;
+        this.propertyId = propertyId;
+        this.ownerId = ownerId;
     }
 
     // Getters y Setters
@@ -45,13 +44,19 @@ public class AdminForCreation {
         this.role = role;
     }
 
-    public List<Long> getOwnerIds() {
-        return ownerIds;
+    public Long getPropertyId() {
+        return propertyId;
     }
 
-    public void setOwnerIds(List<Long> ownerIds) {
-        this.ownerIds = ownerIds;
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 }
-
-

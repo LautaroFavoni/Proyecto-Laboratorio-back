@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/Contract")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "**")
 public class ContractController {
     @Autowired
     ContractRepository contractRepository;
