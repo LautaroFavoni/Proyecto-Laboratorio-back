@@ -73,6 +73,7 @@ public class PaymentsController {
         return now.format(formatter);
     }
 
+
     @GetMapping("/all")
     public ResponseEntity<List<Payments>>all(){
         return ResponseEntity.ok(paymentsRepository.findAll());
