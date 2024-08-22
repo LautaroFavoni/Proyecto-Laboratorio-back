@@ -5,6 +5,8 @@ import com.example.practicaClase.persintence.entities.Property;
 import com.example.practicaClase.persintence.entities.Tenant;
 import jakarta.persistence.Entity;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Payments extends Event {
 
@@ -15,7 +17,7 @@ public class Payments extends Event {
     public Payments() {
     }
 
-    public Payments(String date, Tenant tenant, Property property, Landlord landlord, Double amount) {
+    public Payments(LocalDateTime date, Tenant tenant, Property property, Landlord landlord, Double amount) {
         super(date, tenant, property, landlord);
         this.amount = amount;
     }

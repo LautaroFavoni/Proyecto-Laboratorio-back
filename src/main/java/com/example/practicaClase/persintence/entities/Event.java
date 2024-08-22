@@ -1,7 +1,10 @@
 package com.example.practicaClase.persintence.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -11,17 +14,20 @@ public abstract class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String date;
+    private LocalDateTime date;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "property_id")
     private Property property;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "lanlord_id")
     private Landlord landlord;
 
@@ -30,7 +36,7 @@ public abstract class Event {
     public Event() {
     }
 
-    public Event(String date, Tenant tenant, Property property, Landlord landlord) {
+    public Event(LocalDateTime date, Tenant tenant, Property property, Landlord landlord) {
         this.date = date;
         this.tenant = tenant;
         this.property = property;
@@ -45,11 +51,11 @@ public abstract class Event {
         this.id = id;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

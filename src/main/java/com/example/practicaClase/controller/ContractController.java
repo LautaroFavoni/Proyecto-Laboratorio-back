@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/Contract")
@@ -45,7 +44,7 @@ public class ContractController {
         Landlord landlord = landlordRepository.findById(dto.getLandlordId()).orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
 
         // Verificar si se proporcionó una fecha; si no, establecer la fecha actual
-        String date = dto.getDate() != null ? dto.getDate() : getCurrentDateTimeAsString();
+        LocalDateTime date = dto.getDate() != null ? dto.getDate() : LocalDateTime.now();
 
         Contract contract = new Contract(date, tenant, property, landlord, dto.getEndDate());
         contractRepository.save(contract);
@@ -53,14 +52,5 @@ public class ContractController {
         return ResponseEntity.ok(contract);
     }
 
-    // Método para obtener la fecha y hora actual como cadena
-    private String getCurrentDateTimeAsString() {
-        // Formato de fecha y hora
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        // Obtener la fecha y hora actual
-        LocalDateTime now = LocalDateTime.now();
-        // Convertir a cadena con el formato especificado
-        return now.format(formatter);
-    }
 
 }

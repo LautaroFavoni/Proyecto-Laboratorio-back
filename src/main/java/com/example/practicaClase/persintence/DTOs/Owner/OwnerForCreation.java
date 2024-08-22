@@ -19,7 +19,7 @@ public class OwnerForCreation {
     public OwnerForCreation(String name, String password, String role, Long adminId, List<Long> propertyIds, List<Long> landlordIds, List<Long> tenantIds) {
         this.name = name;
         this.password = password;
-        this.role = role;
+        this.role = "owner";
         this.adminId = adminId;
         this.propertyIds = propertyIds;
         this.landlordIds = landlordIds;

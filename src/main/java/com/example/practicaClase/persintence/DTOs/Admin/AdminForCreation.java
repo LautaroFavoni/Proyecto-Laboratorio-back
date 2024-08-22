@@ -16,7 +16,7 @@ public class AdminForCreation {
     public AdminForCreation(String name, String password, String role, List<Long> ownerIds) {
         this.name = name;
         this.password = password;
-        this.role = role;
+        this.role = "admin";
         this.ownerIds = ownerIds;
     }
 

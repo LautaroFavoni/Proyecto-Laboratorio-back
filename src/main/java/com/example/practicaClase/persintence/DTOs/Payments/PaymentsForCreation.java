@@ -1,7 +1,9 @@
 package com.example.practicaClase.persintence.DTOs.Payments;
 
+import java.time.LocalDateTime;
+
 public class PaymentsForCreation {
-    private String date; // Utiliza el formato que prefieras para la fecha
+    private LocalDateTime date; // Utiliza el formato que prefieras para la fecha
     private Long tenantId;
     private Long propertyId;
     private Long landlordId;
@@ -12,7 +14,7 @@ public class PaymentsForCreation {
     public PaymentsForCreation() {
     }
 
-    public PaymentsForCreation(String date, Long tenantId, Long propertyId, Long landlordId, Double amount) {
+    public PaymentsForCreation(LocalDateTime date, Long tenantId, Long propertyId, Long landlordId, Double amount) {
         this.date = date;
         this.tenantId = tenantId;
         this.propertyId = propertyId;
@@ -20,11 +22,11 @@ public class PaymentsForCreation {
         this.amount = amount;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

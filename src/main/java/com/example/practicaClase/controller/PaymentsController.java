@@ -52,7 +52,7 @@ public class PaymentsController {
                 .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
 
         // Verificar si se proporcionó una fecha; si no, establecer la fecha actual
-        String date = dto.getDate() != null ? dto.getDate() : getCurrentDateTimeAsString();
+        LocalDateTime date = dto.getDate() != null ? dto.getDate() : LocalDateTime.now();
 
 
 
@@ -63,15 +63,6 @@ public class PaymentsController {
         return ResponseEntity.ok(payment);
     }
 
-    // Método para obtener la fecha y hora actual como cadena
-    private String getCurrentDateTimeAsString() {
-        // Formato de fecha y hora
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        // Obtener la fecha y hora actual
-        LocalDateTime now = LocalDateTime.now();
-        // Convertir a cadena con el formato especificado
-        return now.format(formatter);
-    }
 
 
     @GetMapping("/all")

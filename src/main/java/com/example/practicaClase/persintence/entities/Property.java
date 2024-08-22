@@ -1,5 +1,6 @@
 package com.example.practicaClase.persintence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,15 +14,18 @@ public class Property {
 
     @OneToOne(mappedBy = "property")
     @JoinColumn(name = "tenant_id")
+    @JsonBackReference
     private Tenant tenant;
 
     @ManyToOne
     @JoinColumn(name = "landlord_id")
+    @JsonBackReference
     private Landlord landlord;
 
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
+    @JsonBackReference
     private Owner owner;
 
     // Getters and Setters

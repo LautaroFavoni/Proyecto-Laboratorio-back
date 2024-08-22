@@ -16,7 +16,7 @@ public class LandlordForCreation {
     public LandlordForCreation(String name, String password, String role, Long ownerId, List<Long> propertyIds) {
         this.name = name;
         this.password = password;
-        this.role = role;
+        this.role = "landlord";
         this.ownerId = ownerId;
         this.propertyIds = propertyIds;
     }

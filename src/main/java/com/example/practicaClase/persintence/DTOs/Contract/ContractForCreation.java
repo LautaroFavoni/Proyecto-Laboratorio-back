@@ -1,22 +1,22 @@
 package com.example.practicaClase.persintence.DTOs.Contract;
 
-import jakarta.persistence.Entity;
+import java.time.LocalDateTime;
 
 
 public class ContractForCreation {
 
-    private String date;
+    private LocalDateTime date;
     private Long tenantId;
     private Long propertyId;
     private Long landlordId;
-    private String endDate;
+    private LocalDateTime endDate;
 
     // Constructors, Getters, Setters
 
     public ContractForCreation() {
     }
 
-    public ContractForCreation(String date, Long tenantId, Long propertyId, Long landlordId, String endDate) {
+    public ContractForCreation(LocalDateTime date, Long tenantId, Long propertyId, Long landlordId, LocalDateTime endDate) {
         this.date = date;
         this.tenantId = tenantId;
         this.propertyId = propertyId;
@@ -24,11 +24,11 @@ public class ContractForCreation {
         this.endDate = endDate;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -56,11 +56,11 @@ public class ContractForCreation {
         this.landlordId = landlordId;
     }
 
-    public String getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 

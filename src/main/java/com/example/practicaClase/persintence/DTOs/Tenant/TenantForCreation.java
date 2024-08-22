@@ -14,7 +14,7 @@ public class TenantForCreation {
     public TenantForCreation(String name, String password, String role, Long propertyId, Long ownerId) {
         this.name = name;
         this.password = password;
-        this.role = role;
+        this.role = "tenant";
         this.propertyId = propertyId;
         this.ownerId = ownerId;
     }

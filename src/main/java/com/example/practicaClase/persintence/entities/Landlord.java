@@ -1,6 +1,8 @@
 package com.example.practicaClase.persintence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -8,12 +10,12 @@ import java.util.List;
 public class Landlord extends User {
 
     @OneToMany(mappedBy = "landlord")
-    @JsonIgnore
+    @JsonManagedReference
     private List<Property> propertyList;
 
 
     @ManyToOne
-    @JsonIgnore
+    @JsonBackReference
     @JoinColumn(name = "owner_id")
     private Owner owner;
 

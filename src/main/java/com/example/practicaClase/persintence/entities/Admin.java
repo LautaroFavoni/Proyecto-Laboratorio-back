@@ -1,5 +1,6 @@
 package com.example.practicaClase.persintence.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class Admin extends User {
 
     @OneToMany(mappedBy = "admin")
-    @JsonIgnore
+    @JsonBackReference
     private List<Owner> ownerList;
 
     // Getters and Setters
