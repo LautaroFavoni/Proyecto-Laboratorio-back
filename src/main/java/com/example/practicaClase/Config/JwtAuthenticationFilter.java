@@ -1,4 +1,4 @@
-package TurnosOnline.ScapeRoomOnline.Config;
+package com.example.practicaClase.Config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

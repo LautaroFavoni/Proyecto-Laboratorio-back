@@ -1,15 +1,18 @@
-package TurnosOnline.ScapeRoomOnline.Controller;
+package com.example.practicaClase.controller;
 
-import TurnosOnline.ScapeRoomOnline.Config.JwtResponse;
-import TurnosOnline.ScapeRoomOnline.Persistance.DTOs.UserForLogin;
-import TurnosOnline.ScapeRoomOnline.Persistance.entities.User;
-import TurnosOnline.ScapeRoomOnline.Persistance.repository.UserRepository;
-import TurnosOnline.ScapeRoomOnline.Config.JwtService;
+import com.example.practicaClase.Config.JwtResponse;
+import com.example.practicaClase.Config.JwtService;
+import com.example.practicaClase.persintence.DTOs.User.UserForLogin;
+import com.example.practicaClase.persintence.entities.User;
+import com.example.practicaClase.persintence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
@@ -26,6 +29,7 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
+   /*
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         // Verificar si el usuario ya existe
@@ -47,13 +51,15 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuario registrado exitosamente");
     }
 
+    */
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserForLogin loginUser) {
-        Optional<User> optionalUser = userRepository.findByUsername(loginUser.getUsername());
+        Optional<User> optionalUser = userRepository.findByname(loginUser.getUsername());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (passwordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
-                String token = jwtService.generateToken(user.getUsername());
+                String token = jwtService.generateToken(user.getName());
                 return ResponseEntity.ok(new JwtResponse(token));
             }
         }

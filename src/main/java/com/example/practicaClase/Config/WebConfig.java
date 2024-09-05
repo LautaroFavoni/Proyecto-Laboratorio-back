@@ -1,5 +1,4 @@
-package TurnosOnline.ScapeRoomOnline.Config;
-import org.springframework.context.annotation.Bean;
+package com.example.practicaClase.Config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

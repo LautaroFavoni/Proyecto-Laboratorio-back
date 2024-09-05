@@ -1,4 +1,4 @@
-package TurnosOnline.ScapeRoomOnline.Config;
+package com.example.practicaClase.Config;
 
 public class JwtResponse {
 

@@ -11,6 +11,7 @@ import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -30,6 +31,9 @@ public class LandlordController {
     @Autowired
     private PropertyRepository propertyRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/new")
     public ResponseEntity<Landlord> createLandlord(@RequestBody LandlordForCreation dto) {
         // Buscar Owner por ID
@@ -47,7 +51,8 @@ public class LandlordController {
         // Crear el nuevo Landlord
         Landlord landlord = new Landlord();
         landlord.setName(dto.getName());
-        landlord.setPassword(dto.getPassword());
+        // Encriptar la contraseña
+        landlord.setPassword(passwordEncoder.encode(landlord.getPassword()));
         landlord.setRole(dto.getRole());
         landlord.setOwner(owner);
         landlord.setPropertyList(properties);

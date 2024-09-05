@@ -9,13 +9,14 @@ import com.example.practicaClase.persintence.repository.AdminRepository;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/Admin")
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -24,12 +25,16 @@ public class AdminController {
     @Autowired
     OwnerRepository ownerRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping("/new")
     public ResponseEntity<Admin> createAdmin(@RequestBody AdminForCreation dto) {
         // Crear un nuevo Admin
         Admin admin = new Admin();
         admin.setName(dto.getName());
-        admin.setPassword(dto.getPassword());
+        // Encriptar la contraseña
+        admin.setPassword(passwordEncoder.encode(dto.getPassword()));
         admin.setRole(dto.getRole());
 
         // Guardar el Admin en la base de datos

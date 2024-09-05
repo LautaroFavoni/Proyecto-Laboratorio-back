@@ -1,4 +1,4 @@
-package TurnosOnline.ScapeRoomOnline.Config;
+package com.example.practicaClase.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authz -> authz
-                        .requestMatchers("/register", "/login", "/public/api/turnos/crear").permitAll()
+                        .requestMatchers("/register", "/login", "/admin/new").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -9,6 +9,7 @@ import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class OwnerController {
     @Autowired
     AdminRepository adminRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @PostMapping("new")
     public ResponseEntity<Owner> createOwner(@RequestBody OwnerForCreation dto) {
         Admin admin = adminRepository.findById(dto.getAdminId())
@@ -34,7 +38,8 @@ public class OwnerController {
         // Crear y guardar el objeto Owner
         Owner owner = new Owner();
         owner.setName(dto.getName());
-        owner.setPassword(dto.getPassword());
+        // Encriptar la contraseña
+        owner.setPassword(passwordEncoder.encode(owner.getPassword()));
         owner.setRole(dto.getRole());
         owner.setAdmin(admin);
 

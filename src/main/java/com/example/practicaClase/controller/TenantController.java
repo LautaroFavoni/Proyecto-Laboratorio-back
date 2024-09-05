@@ -10,6 +10,7 @@ import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class TenantController {
     @Autowired
     PropertyRepository propertyRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
 
     @PostMapping("/new")
@@ -45,7 +49,8 @@ public class TenantController {
         // Crear el nuevo Tenant
         Tenant tenant = new Tenant();
         tenant.setName(dto.getName());
-        tenant.setPassword(dto.getPassword());
+        // Encriptar la contraseña
+        tenant.setPassword(passwordEncoder.encode(tenant.getPassword()));
         tenant.setRole(dto.getRole());
         tenant.setOwner(owner);
         tenant.setProperty(property);
