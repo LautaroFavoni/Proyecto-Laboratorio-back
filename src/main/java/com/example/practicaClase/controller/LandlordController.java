@@ -52,7 +52,7 @@ public class LandlordController {
         Landlord landlord = new Landlord();
         landlord.setName(dto.getName());
         // Encriptar la contraseña
-        landlord.setPassword(passwordEncoder.encode(landlord.getPassword()));
+        landlord.setPassword(passwordEncoder.encode(dto.getPassword()));
         landlord.setRole(dto.getRole());
         landlord.setOwner(owner);
         landlord.setPropertyList(properties);

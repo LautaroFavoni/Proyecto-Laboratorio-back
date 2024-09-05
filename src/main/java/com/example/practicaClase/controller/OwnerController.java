@@ -39,7 +39,7 @@ public class OwnerController {
         Owner owner = new Owner();
         owner.setName(dto.getName());
         // Encriptar la contraseña
-        owner.setPassword(passwordEncoder.encode(owner.getPassword()));
+        owner.setPassword(passwordEncoder.encode(dto.getPassword()));
         owner.setRole(dto.getRole());
         owner.setAdmin(admin);
 

@@ -50,7 +50,7 @@ public class TenantController {
         Tenant tenant = new Tenant();
         tenant.setName(dto.getName());
         // Encriptar la contraseña
-        tenant.setPassword(passwordEncoder.encode(tenant.getPassword()));
+        tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
         tenant.setRole(dto.getRole());
         tenant.setOwner(owner);
         tenant.setProperty(property);
