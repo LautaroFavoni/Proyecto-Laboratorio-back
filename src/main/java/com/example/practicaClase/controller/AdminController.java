@@ -32,7 +32,7 @@ public class AdminController {
     public ResponseEntity<Admin> createAdmin(@RequestBody AdminForCreation dto) {
         // Crear un nuevo Admin
         Admin admin = new Admin();
-        admin.setName(dto.getName());
+        admin.setName(dto.getMail());
         // Encriptar la contraseña
         admin.setPassword(passwordEncoder.encode(dto.getPassword()));
         admin.setRole(dto.getRole());

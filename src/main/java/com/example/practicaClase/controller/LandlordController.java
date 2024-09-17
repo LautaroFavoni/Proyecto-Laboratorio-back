@@ -50,7 +50,7 @@ public class LandlordController {
 
         // Crear el nuevo Landlord
         Landlord landlord = new Landlord();
-        landlord.setName(dto.getName());
+        landlord.setName(dto.getMail());
         // Encriptar la contraseña
         landlord.setPassword(passwordEncoder.encode(dto.getPassword()));
         landlord.setRole(dto.getRole());

@@ -1,7 +1,7 @@
 package com.example.practicaClase.persintence.DTOs.Tenant;
 
 public class TenantForCreation {
-    private String name;
+    private String mail;
     private String password;
     private String role;
     private Long propertyId;
@@ -11,8 +11,8 @@ public class TenantForCreation {
     public TenantForCreation() {
     }
 
-    public TenantForCreation(String name, String password, String role, Long propertyId, Long ownerId) {
-        this.name = name;
+    public TenantForCreation(String mail, String password, String role, Long propertyId, Long ownerId) {
+        this.mail = mail;
         this.password = password;
         this.role = "tenant";
         this.propertyId = propertyId;
@@ -20,12 +20,12 @@ public class TenantForCreation {
     }
 
     // Getters y Setters
-    public String getName() {
-        return name;
+    public String getMail() {
+        return mail;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

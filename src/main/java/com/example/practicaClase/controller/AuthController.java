@@ -55,7 +55,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserForLogin loginUser) {
-        Optional<User> optionalUser = userRepository.findByname(loginUser.getUsername());
+        Optional<User> optionalUser = userRepository.findByname(loginUser.getMail());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (passwordEncoder.matches(loginUser.getPassword(), user.getPassword())) {

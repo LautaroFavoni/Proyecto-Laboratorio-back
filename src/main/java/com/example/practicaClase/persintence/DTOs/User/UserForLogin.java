@@ -1,26 +1,25 @@
 package com.example.practicaClase.persintence.DTOs.User;
 
-
 public class UserForLogin {
-    private String name;
+    private String mail;
     private String password;
 
     // Constructor vacío
     public UserForLogin() {}
 
     // Constructor con argumentos
-    public UserForLogin(String name, String password) {
-        this.name = name;
+    public UserForLogin(String mail, String password) {
+        this.mail = mail;
         this.password = password;
     }
 
     // Getters y Setters
-    public String getUsername() {
-        return name;
+    public String getMail() {
+        return mail;
     }
 
-    public void setUsername(String name) {
-        this.name = name;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

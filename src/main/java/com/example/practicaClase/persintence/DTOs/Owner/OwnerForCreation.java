@@ -4,7 +4,7 @@ import java.util.List;
 
 public class OwnerForCreation {
 
-    private String name;
+    private String mail;
     private String password;
     private String role;
     private Long adminId;
@@ -16,8 +16,8 @@ public class OwnerForCreation {
     public OwnerForCreation() {
     }
 
-    public OwnerForCreation(String name, String password, String role, Long adminId, List<Long> propertyIds, List<Long> landlordIds, List<Long> tenantIds) {
-        this.name = name;
+    public OwnerForCreation(String mail, String password, String role, Long adminId, List<Long> propertyIds, List<Long> landlordIds, List<Long> tenantIds) {
+        this.mail = mail;
         this.password = password;
         this.role = "owner";
         this.adminId = adminId;
@@ -27,12 +27,12 @@ public class OwnerForCreation {
     }
 
     // Getters y Setters
-    public String getName() {
-        return name;
+    public String getMail() {
+        return mail;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

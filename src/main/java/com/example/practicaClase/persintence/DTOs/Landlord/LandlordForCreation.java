@@ -3,7 +3,7 @@ package com.example.practicaClase.persintence.DTOs.Landlord;
 import java.util.List;
 
 public class LandlordForCreation {
-    private String name;
+    private String mail;
     private String password;
     private String role;
     private Long ownerId;
@@ -13,8 +13,8 @@ public class LandlordForCreation {
     public LandlordForCreation() {
     }
 
-    public LandlordForCreation(String name, String password, String role, Long ownerId, List<Long> propertyIds) {
-        this.name = name;
+    public LandlordForCreation(String mail, String password, String role, Long ownerId, List<Long> propertyIds) {
+        this.mail = mail;
         this.password = password;
         this.role = "landlord";
         this.ownerId = ownerId;
@@ -22,12 +22,12 @@ public class LandlordForCreation {
     }
 
     // Getters y Setters
-    public String getName() {
-        return name;
+    public String getMail() {
+        return mail;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {
