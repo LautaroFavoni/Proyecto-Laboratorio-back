@@ -18,9 +18,10 @@ public class JwtService {
     private final String secretKey = "pQ1MqycZ7bqZcO3Gx0HDVjNyrI8AmdWCuqPg8T8D+cM=";
     private final long expirationTime = 86400000; // 24 hours in milliseconds
 
-    public String generateToken(String username) {
+    public String generateToken(String mail, String role) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(mail)
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -46,14 +47,14 @@ public class JwtService {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    public boolean validateToken(String token, String username) {
-        return (username.equals(extractUsername(token)) && !isTokenExpired(token));
+    public boolean validateToken(String token, String mail) {
+        return (mail.equals(extractUsername(token)) && !isTokenExpired(token));
     }
 
     public Authentication getAuthentication(String token) {
-        String username = extractUsername(token);
+        String mail = extractUsername(token);
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                username, "", Collections.singleton(new SimpleGrantedAuthority("USER")));
+                mail, "", Collections.singleton(new SimpleGrantedAuthority("USER")));
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 }

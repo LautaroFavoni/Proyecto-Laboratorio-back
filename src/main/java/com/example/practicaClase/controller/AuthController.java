@@ -54,16 +54,25 @@ public class AuthController {
     */
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserForLogin loginUser) {
-        Optional<User> optionalUser = userRepository.findByname(loginUser.getMail());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (passwordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
-                String token = jwtService.generateToken(user.getName());
-                return ResponseEntity.ok(new JwtResponse(token));
+    public ResponseEntity<?> login(@RequestBody UserForLogin loginUser)
+    {
+        try {
+
+            Optional<User> optionalUser = userRepository.findByMail(loginUser.getMail());
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+                if (passwordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
+                    String token = jwtService.generateToken(user.getMail(), user.getRole());
+                    return ResponseEntity.ok(new JwtResponse(token));
+                }
             }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al utilizar auth." + e.getCause());
+        }
+        }
+
     }
-}
+
 

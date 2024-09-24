@@ -10,9 +10,10 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String mail;
     private String password;
-    private String role;
+    private String role ;
 
     // Getters and Setters
     public Long getId() {
@@ -23,12 +24,12 @@ public abstract class User {
         this.id = id;
     }
 
-    public String getName() {
+    public String getMail() {
         return mail;
     }
 
-    public void setName(String name) {
-        this.mail = name;
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getPassword() {

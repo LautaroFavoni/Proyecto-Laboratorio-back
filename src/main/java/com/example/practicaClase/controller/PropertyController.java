@@ -13,6 +13,7 @@ import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,23 +43,31 @@ public class PropertyController {
     }
 
     @PostMapping("new")
-    public ResponseEntity<Property> createProperty(@RequestBody PropertyForCreation dto) {
-        Tenant tenant = tenantRepository.findById(dto.getTenantId())
-                .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
-        Landlord landlord = landlordRepository.findById(dto.getLandlordId())
-                .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
-        Owner owner = ownerRepository.findById(dto.getOwnerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
-        // Crear y guardar el objeto Property
-        Property property = new Property();
-        property.setTenant(tenant);
-        property.setLandlord(landlord);
-        property.setOwner(owner);
+    public ResponseEntity<?> createProperty(@RequestBody PropertyForCreation dto) {
+        try {
 
-        propertyRepository.save(property);
 
-        return ResponseEntity.ok(property);
+            Tenant tenant = tenantRepository.findById(dto.getTenantId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+            Landlord landlord = landlordRepository.findById(dto.getLandlordId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+            Owner owner = ownerRepository.findById(dto.getOwnerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
+
+            // Crear y guardar el objeto Property
+            Property property = new Property();
+            property.setTenant(tenant);
+            property.setLandlord(landlord);
+            property.setOwner(owner);
+
+            propertyRepository.save(property);
+
+            return ResponseEntity.ok(property);
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el PAGO.");
+        }
     }
 
     @GetMapping("/all")

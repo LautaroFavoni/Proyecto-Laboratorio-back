@@ -1,9 +1,15 @@
 package com.example.practicaClase.persintence.DTOs.Landlord;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 import java.util.List;
 
 public class LandlordForCreation {
+    @Email(message = "El correo electrónico no tiene un formato válido")
+    @NotBlank(message = "El correo electrónico es obligatorio")
     private String mail;
+    @NotBlank(message = "El correo electrónico es obligatorio")
     private String password;
     private String role;
     private Long ownerId;

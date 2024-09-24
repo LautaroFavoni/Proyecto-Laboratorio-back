@@ -8,7 +8,9 @@ import com.example.practicaClase.persintence.entities.Tenant;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -35,51 +37,55 @@ public class TenantController {
 
 
     @PostMapping("/new")
-    public ResponseEntity<Tenant> createTenant(@RequestBody TenantForCreation dto) {
-        // Buscar Owner por ID
-        Owner owner = ownerRepository.findById(dto.getOwnerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
+    public ResponseEntity<?> createTenant(@Valid @RequestBody TenantForCreation dto) {
+        try {
 
-        // Buscar Property por ID, permitiendo que la propiedad sea null
-        Property property = dto.getPropertyId() != null ?
-                propertyRepository.findById(dto.getPropertyId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Property not found")) :
-                null;
+            // Buscar Owner por ID
+            Owner owner = ownerRepository.findById(dto.getOwnerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
-        // Crear el nuevo Tenant
-        Tenant tenant = new Tenant();
-        tenant.setName(dto.getMail());
-        // Encriptar la contraseña
-        tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
-        tenant.setRole(dto.getRole());
-        tenant.setOwner(owner);
-        tenant.setProperty(property);
+            // Buscar Property por ID, permitiendo que la propiedad sea null
+            Property property = dto.getPropertyId() != null ?
+                    propertyRepository.findById(dto.getPropertyId())
+                            .orElseThrow(() -> new ResourceNotFoundException("Property not found")) :
+                    null;
 
-        // Guardar el Tenant en la base de datos
-        tenantRepository.save(tenant);
+            // Crear el nuevo Tenant
+            Tenant tenant = new Tenant();
+            tenant.setMail(dto.getMail());
+            // Encriptar la contraseña
+            tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
+            tenant.setRole(dto.getRole());
+            tenant.setOwner(owner);
+            tenant.setProperty(property);
 
-        // Actualizar el Tenant en la Property y guardar si la Property no es null
-        if (property != null) {
-            property.setTenant(tenant);
-            propertyRepository.save(property);
+            // Guardar el Tenant en la base de datos
+            tenantRepository.save(tenant);
+
+            // Actualizar el Tenant en la Property y guardar si la Property no es null
+            if (property != null) {
+                property.setTenant(tenant);
+                propertyRepository.save(property);
+            }
+
+            // Agregar el Tenant a la lista de Tenants del Owner, asegurando que la lista no sea null
+            if (owner.getTenantList() == null) {
+                owner.setTenantList(new ArrayList<>());
+            }
+            owner.getTenantList().add(tenant);
+            ownerRepository.save(owner);
+
+            // Devolver respuesta
+            return ResponseEntity.ok(tenant);
         }
-
-        // Agregar el Tenant a la lista de Tenants del Owner, asegurando que la lista no sea null
-        if (owner.getTenantList() == null) {
-            owner.setTenantList(new ArrayList<>());
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Tenant.");
         }
-        owner.getTenantList().add(tenant);
-        ownerRepository.save(owner);
-
-        // Devolver respuesta
-        return ResponseEntity.ok(tenant);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Tenant>>all(){
         return ResponseEntity.ok(tenantRepository.findAll());
     }
-
-
 
 }
