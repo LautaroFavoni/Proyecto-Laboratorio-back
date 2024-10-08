@@ -1,5 +1,6 @@
 package com.example.practicaClase.controller;
 
+import com.example.practicaClase.Config.JwtService;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Owner.OwnerForCreation;
 import com.example.practicaClase.persintence.entities.Admin;
@@ -32,10 +33,21 @@ public class OwnerController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    JwtService jwtService;
+
+
     @PostMapping("new")
-    public ResponseEntity<?> createOwner(@Valid @RequestBody OwnerForCreation dto) {
+    public ResponseEntity<?> createOwner(@Valid @RequestBody OwnerForCreation dto,@RequestHeader("Authorization") String token) {
 
         try {
+            // Extraer el rol del token JWT
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Verificar si el rol es "admin" o "owner"
+            if (!"admin".equals(role) && !"owner".equals(role)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            }
 
 
             Admin admin = adminRepository.findById(dto.getAdminId())
@@ -63,7 +75,16 @@ public class OwnerController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Owner>>all(){
+    public ResponseEntity<?>all(@RequestHeader("Authorization") String token){
+        // Extraer el rol del token JWT
+        String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+        // Verificar si el rol es "admin" o "owner"
+        if (!"admin".equals(role) && !"owner".equals(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+        }
+
+
         return ResponseEntity.ok(ownerRepository.findAll());
     }
 }

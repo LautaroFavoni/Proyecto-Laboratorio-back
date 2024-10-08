@@ -1,5 +1,6 @@
 package com.example.practicaClase.controller;
 
+import com.example.practicaClase.Config.JwtService;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Admin.AdminForCreation;
 import com.example.practicaClase.persintence.entities.Admin;
@@ -31,10 +32,21 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping("/new")
-    public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminForCreation dto) {
+    public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminForCreation dto,  @RequestHeader("Authorization") String token) {
 
         try {
+
+            // Extraer el rol del token
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Validar si el rol es "admin"
+            //if (!"admin".equals(role)) {
+                //return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            //}
             Admin admin = new Admin();
             admin.setMail(dto.getMail());
             admin.setRole("admin");
@@ -70,8 +82,18 @@ public class AdminController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Admin>>all(){
+    public ResponseEntity<?>all(@RequestHeader("Authorization") String token){
+
+        // Extraer el rol del token
+        String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+        // Validar si el rol es "admin"
+        if (!"admin".equals(role)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+        }
+
         return ResponseEntity.ok(adminRepository.findAll());
+
     }
 }
 
