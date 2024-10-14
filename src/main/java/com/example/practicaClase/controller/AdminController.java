@@ -4,7 +4,6 @@ import com.example.practicaClase.Config.JwtService;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Admin.AdminForCreation;
 import com.example.practicaClase.persintence.entities.Admin;
-
 import com.example.practicaClase.persintence.entities.Owner;
 import com.example.practicaClase.persintence.repository.AdminRepository;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
@@ -13,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -35,18 +34,18 @@ public class AdminController {
     @Autowired
     private JwtService jwtService;
 
+    @Transactional // Asegura que todas las operaciones se realicen en una transacción
     @PostMapping("/new")
-    public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminForCreation dto,  @RequestHeader("Authorization") String token) {
-
+    public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminForCreation dto, @RequestHeader("Authorization") String token) {
         try {
-
             // Extraer el rol del token
             String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
 
             // Validar si el rol es "admin"
-            //if (!"admin".equals(role)) {
-                //return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
-            //}
+            // if (!"admin".equals(role)) {
+            //     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            // }
+
             Admin admin = new Admin();
             admin.setMail(dto.getMail());
             admin.setRole("admin");
@@ -69,21 +68,15 @@ public class AdminController {
                 }
             }
 
-            // Guardar el Admin actualizado
-            adminRepository.save(admin);
-
             // Devolver respuesta
             return ResponseEntity.ok(admin);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Admin: " + e.getMessage());
         }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Admin." + e.getCause());
-        }
-
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?>all(@RequestHeader("Authorization") String token){
-
+    public ResponseEntity<?> all(@RequestHeader("Authorization") String token) {
         // Extraer el rol del token
         String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
 
@@ -93,7 +86,5 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(adminRepository.findAll());
-
     }
 }
-

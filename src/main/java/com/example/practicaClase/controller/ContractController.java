@@ -7,6 +7,7 @@ import com.example.practicaClase.persintence.repository.ContractRepository;
 import com.example.practicaClase.persintence.repository.LandlordRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,9 @@ public class ContractController {
         contractRepository.save(contract);
         return ResponseEntity.ok("contract created successfully");
     }
+
+    @Transactional
+
 
     @PostMapping("new")
     public ResponseEntity<?> createContract(@RequestBody ContractForCreation dto) {

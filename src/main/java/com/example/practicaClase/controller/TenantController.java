@@ -8,6 +8,7 @@ import com.example.practicaClase.persintence.entities.Tenant;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,8 @@ public class TenantController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+
+    @Transactional
 
 
     @PostMapping("/new")

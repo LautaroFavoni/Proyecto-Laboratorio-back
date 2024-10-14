@@ -9,6 +9,7 @@ import com.example.practicaClase.persintence.entities.Property;
 import com.example.practicaClase.persintence.repository.LandlordRepository;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,9 @@ public class LandlordController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Transactional
+
 
     @PostMapping("/new")
     public ResponseEntity<?> createLandlord(@Valid @RequestBody LandlordForCreation dto) {
@@ -77,6 +81,8 @@ public class LandlordController {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Admin.");
         }
     }
+
+    @Transactional
 
 
 

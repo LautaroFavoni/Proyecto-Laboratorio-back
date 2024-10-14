@@ -8,6 +8,7 @@ import com.example.practicaClase.persintence.entities.Owner;
 import com.example.practicaClase.persintence.repository.AdminRepository;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.service.OwnerService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,8 @@ public class OwnerController {
 
     @Autowired
     JwtService jwtService;
+
+    @Transactional
 
 
     @PostMapping("new")
@@ -73,6 +76,10 @@ public class OwnerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Owner.");
         }
     }
+
+    @Transactional
+
+
 
     @GetMapping("/all")
     public ResponseEntity<?>all(@RequestHeader("Authorization") String token){

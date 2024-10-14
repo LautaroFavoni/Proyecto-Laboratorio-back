@@ -10,6 +10,7 @@ import com.example.practicaClase.persintence.repository.LandlordRepository;
 import com.example.practicaClase.persintence.repository.PaymentsRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,8 @@ public class PaymentsController {
     @Autowired
     private LandlordRepository landlordRepository;
 
+    @Transactional
+
 
     @PostMapping("/new-entidades-completas")
     public ResponseEntity<String> New(@RequestBody Payments payments) {
@@ -42,6 +45,9 @@ public class PaymentsController {
         paymentsRepository.save(payments);
         return ResponseEntity.ok("Owner created successfully");
     }
+
+    @Transactional
+
 
     @PostMapping("new1")
     public ResponseEntity<Payments> createPayment1(@RequestBody PaymentsForCreation dto) {
@@ -63,6 +69,9 @@ public class PaymentsController {
 
         return ResponseEntity.ok(payment);
     }
+
+    @Transactional
+
 
     @PostMapping("/new")
     public ResponseEntity<?> createPayment(@RequestBody PaymentsForCreation dto) {

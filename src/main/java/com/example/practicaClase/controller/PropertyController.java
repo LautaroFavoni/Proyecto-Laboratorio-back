@@ -12,6 +12,7 @@ import com.example.practicaClase.persintence.repository.LandlordRepository;
 import com.example.practicaClase.persintence.repository.OwnerRepository;
 import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,8 @@ public class PropertyController {
     @Autowired
     private OwnerRepository ownerRepository;
 
+    @Transactional
+
 
 
     @PostMapping("/new-entidades-completas")
@@ -41,6 +44,9 @@ public class PropertyController {
         propertyRepository.save(property);
         return ResponseEntity.ok("Owner created successfully");
     }
+
+    @Transactional
+
 
     @PostMapping("new")
 
