@@ -36,15 +36,16 @@ public class AdminController {
 
     @Transactional // Asegura que todas las operaciones se realicen en una transacción
     @PostMapping("/new")
-    public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminForCreation dto, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> createAdmin(@Valid @RequestBody AdminForCreation dto, @RequestHeader(value = "Authorization", required = false) String token)
+ {
         try {
-            // Extraer el rol del token
+            //Extraer el rol del token
             String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
 
             // Validar si el rol es "admin"
-            // if (!"admin".equals(role)) {
-            //     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
-            // }
+             if (!"admin".equals(role)) {
+                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+             }
 
             Admin admin = new Admin();
             admin.setMail(dto.getMail());
