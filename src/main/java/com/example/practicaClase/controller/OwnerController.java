@@ -61,7 +61,7 @@ public class OwnerController {
             owner.setMail(dto.getMail());
             // Encriptar la contraseña
             owner.setPassword(passwordEncoder.encode(dto.getPassword()));
-            owner.setRole(dto.getRole());
+            owner.setRole("owner");
             owner.setAdmin(admin);
 
             // Agregar el Owner a la lista de Owners del Admin

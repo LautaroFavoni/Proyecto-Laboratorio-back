@@ -58,7 +58,7 @@ public class TenantController {
             tenant.setMail(dto.getMail());
             // Encriptar la contraseña
             tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
-            tenant.setRole(dto.getRole());
+            tenant.setRole("tenant");
             tenant.setOwner(owner);
             tenant.setProperty(property);
 
