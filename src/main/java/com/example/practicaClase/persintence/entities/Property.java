@@ -28,6 +28,10 @@ public class Property {
     @JsonBackReference
     private Owner owner;
 
+    private String adress;
+
+    private String description;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -59,6 +63,22 @@ public class Property {
 
     public void setLandlord(Landlord landlord) {
         this.landlord = landlord;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

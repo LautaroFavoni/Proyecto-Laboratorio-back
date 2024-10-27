@@ -4,6 +4,7 @@ package com.example.practicaClase.controller;
 
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Property.PropertyForCreation;
+import com.example.practicaClase.persintence.DTOs.Property.PropertyResponseDTO;
 import com.example.practicaClase.persintence.entities.Landlord;
 import com.example.practicaClase.persintence.entities.Owner;
 import com.example.practicaClase.persintence.entities.Property;
@@ -66,23 +67,54 @@ public class PropertyController {
             property.setTenant(tenant);
             property.setLandlord(landlord);
             property.setOwner(owner);
+            property.setAdress(dto.getAddress());
+            property.setDescription(dto.getDescription());
+
+            tenant.setProperty(property);
+
+
+
+
+
+
 
             propertyRepository.save(property);
 
-            return ResponseEntity.ok(property);
+            PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
+
+            return ResponseEntity.ok(dtoResponse);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el PAGO.");
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Property>>all(){
-        return ResponseEntity.ok(propertyRepository.findAll());
+    private static PropertyResponseDTO getPropertyResponseDTO(Property property) {
+        PropertyResponseDTO dtoResponse = new PropertyResponseDTO();
+        dtoResponse.setId(property.getId());
+        dtoResponse.setAdress(property.getAdress());
+        dtoResponse.setDescription(property.getDescription());
+        dtoResponse.setTenantId(property.getTenant() != null ? property.getTenant().getId() : null);
+        dtoResponse.setLandlordId(property.getLandlord() != null ? property.getLandlord().getId() : null);
+        dtoResponse.setOwnerId(property.getOwner() != null ? property.getOwner().getId() : null);
+        return dtoResponse;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<PropertyResponseDTO>> all() {
+        List<PropertyResponseDTO> dtoList = propertyRepository.findAll().stream().map(property -> {
+            PropertyResponseDTO dto = new PropertyResponseDTO();
+            dto.setId(property.getId());
+            dto.setAdress(property.getAdress());
+            dto.setDescription(property.getDescription());
+            dto.setTenantId(property.getTenant() != null ? property.getTenant().getId() : null);
+            dto.setLandlordId(property.getLandlord() != null ? property.getLandlord().getId() : null);
+            dto.setOwnerId(property.getOwner() != null ? property.getOwner().getId() : null);
+            return dto;
+        }).toList();
 
-
+        return ResponseEntity.ok(dtoList);
+    }
 
 
 }

@@ -74,4 +74,7 @@ public abstract class Event {
     public void setProperty(Property property) {
         this.property = property;
     }
+
+    public Landlord getLandlord() { return landlord;
+    }
 }

@@ -36,3 +36,5 @@ public class Landlord extends User {
         this.owner = owner;
     }
 }
+
+

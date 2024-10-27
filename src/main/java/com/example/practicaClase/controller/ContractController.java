@@ -2,6 +2,7 @@ package com.example.practicaClase.controller;
 
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Contract.ContractForCreation;
+import com.example.practicaClase.persintence.DTOs.Contract.ContractResponseDTO;
 import com.example.practicaClase.persintence.entities.*;
 import com.example.practicaClase.persintence.repository.ContractRepository;
 import com.example.practicaClase.persintence.repository.LandlordRepository;
@@ -14,9 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/Contract")
+@RequestMapping("/contract")
 @CrossOrigin(origins = "**")
 public class ContractController {
     @Autowired
@@ -40,6 +43,18 @@ public class ContractController {
     }
 
     @Transactional
+
+    // Método para convertir un Contract en un ContractResponseDTO
+    public ContractResponseDTO convertToDTO(Contract contract) {
+        return new ContractResponseDTO(
+                contract.getId(),
+                contract.getDate(),
+                contract.getTenant().getId(),
+                contract.getProperty().getId(),
+                contract.getLandlord().getId(),
+                contract.getEndDate()
+        );
+    }
 
 
     @PostMapping("new")
@@ -69,14 +84,25 @@ public class ContractController {
             // Verificar si se proporcionó una fecha; si no, establecer la fecha actual
             LocalDateTime date = dto.getDate() != null ? dto.getDate() : LocalDateTime.now();
 
+            // Crear el contrato
             Contract contract = new Contract(date, tenant, property, landlord, dto.getEndDate());
             contractRepository.save(contract);
 
-            return ResponseEntity.ok(contract);
+            // Convertir a DTO para la respuesta
+            ContractResponseDTO responseDTO = convertToDTO(contract);
+            return ResponseEntity.ok(responseDTO);
         }
         catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Contrato");
         }
+    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ContractResponseDTO>> all() {
+        List<Contract> contracts = contractRepository.findAll();
+        List<ContractResponseDTO> contractDTOs = contracts.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(contractDTOs);
     }
 
 
