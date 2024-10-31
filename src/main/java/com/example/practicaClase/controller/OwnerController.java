@@ -94,6 +94,41 @@ public class OwnerController {
 
         return ResponseEntity.ok(ownerRepository.findAll());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateOwner(@PathVariable Long id, @Valid @RequestBody OwnerForCreation dto, @RequestHeader("Authorization") String token) {
+        try {
+            // Extraer el rol del token JWT
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Verificar si el rol es "admin" o "owner"
+            if (!"admin".equals(role) && !"owner".equals(role)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            }
+
+            // Buscar el Owner por ID
+            Owner existingOwner = ownerRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
+
+            // Buscar el Admin por ID
+            Admin admin = adminRepository.findById(dto.getAdminId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
+
+            // Actualizar los datos del Owner
+            existingOwner.setMail(dto.getMail());
+            existingOwner.setPassword(passwordEncoder.encode(dto.getPassword()));
+            existingOwner.setAdmin(admin);
+
+            // Guardar los cambios en la base de datos
+            ownerRepository.save(existingOwner);
+
+            return ResponseEntity.ok(existingOwner);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el Owner.");
+        }
+    }
 }
 
 

@@ -51,6 +51,8 @@ public class PaymentsController {
         );
     }
 
+
+
     @PostMapping("/new")
     public ResponseEntity<?> createPayment(@RequestBody PaymentsForCreation dto) {
 
@@ -96,6 +98,25 @@ public class PaymentsController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseDTOs);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePayment(@PathVariable Long id) {
+        try {
+            // Buscar el Payment por ID
+            Payments payment = paymentsRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Payment not found"));
+
+            // Eliminar el Payment de la base de datos
+            paymentsRepository.delete(payment);
+
+            // Devolver respuesta de éxito
+            return ResponseEntity.ok("Payment deleted successfully");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Pago.");
+        }
     }
 
 }

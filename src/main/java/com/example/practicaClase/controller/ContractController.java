@@ -105,5 +105,23 @@ public class ContractController {
         return ResponseEntity.ok(contractDTOs);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteContract(@PathVariable Long id) {
+        try {
+            // Buscar el contrato por ID
+            Contract contract = contractRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
+
+            // Eliminar el contrato
+            contractRepository.delete(contract);
+
+            return ResponseEntity.ok("Contract deleted successfully");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el contrato");
+        }
+    }
+
 
 }
