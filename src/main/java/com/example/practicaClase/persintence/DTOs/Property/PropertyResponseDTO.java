@@ -2,15 +2,15 @@ package com.example.practicaClase.persintence.DTOs.Property;
 
 public class PropertyResponseDTO {
     private Long id;
-    private String adress;
+    private String address;
     private String description;
     private String tenantMail;
     private String landlordMail;
     private String ownerMail;
 
-    public PropertyResponseDTO(Long id, String adress, String description, String tenantMail, String ownerMail, String landlordMail) {
+    public PropertyResponseDTO(Long id, String address, String description, String tenantMail, String ownerMail, String landlordMail) {
         this.id = id;
-        this.adress = adress;
+        this.address = address;
         this.description = description;
         this.tenantMail = tenantMail;
         this.landlordMail = landlordMail;
@@ -29,12 +29,12 @@ public class PropertyResponseDTO {
         this.id = id;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String adress) {
+        this.address = adress;
     }
 
     public String getDescription() {

@@ -88,7 +88,7 @@ public class PropertyController {
     private static PropertyResponseDTO getPropertyResponseDTO(Property property) {
         PropertyResponseDTO dtoResponse = new PropertyResponseDTO();
         dtoResponse.setId(property.getId());
-        dtoResponse.setAdress(property.getAdress());
+        dtoResponse.setAddress(property.getAdress());
         dtoResponse.setDescription(property.getDescription());
 
         // Asignar correos electrónicos con comprobación de null
@@ -105,7 +105,7 @@ public class PropertyController {
         List<PropertyResponseDTO> dtoList = propertyRepository.findAll().stream().map(property -> {
             PropertyResponseDTO dto = new PropertyResponseDTO();
             dto.setId(property.getId());
-            dto.setAdress(property.getAdress());
+            dto.setAddress(property.getAdress());
             dto.setDescription(property.getDescription());
 
             // Asignar correos electrónicos en lugar de IDs
