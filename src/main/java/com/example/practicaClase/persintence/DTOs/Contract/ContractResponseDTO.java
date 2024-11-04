@@ -6,20 +6,21 @@ public class ContractResponseDTO {
 
     private Long id;
     private LocalDateTime date;
-    private Long tenantId;
+
+    private  String tenantMail;
     private Long propertyId;
-    private Long landlordId;
+    private String landlordMail;
     private LocalDateTime endDate;
 
     // Constructores
     public ContractResponseDTO() {}
 
-    public ContractResponseDTO(Long id, LocalDateTime date, Long tenantId, Long propertyId, Long landlordId, LocalDateTime endDate) {
+    public ContractResponseDTO(Long id, LocalDateTime date, String tenantMail, Long propertyId, String landlordMail, LocalDateTime endDate) {
         this.id = id;
         this.date = date;
-        this.tenantId = tenantId;
+        this.tenantMail = tenantMail;
         this.propertyId = propertyId;
-        this.landlordId = landlordId;
+        this.landlordMail = landlordMail;
         this.endDate = endDate;
     }
 
@@ -40,13 +41,6 @@ public class ContractResponseDTO {
         this.date = date;
     }
 
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
 
     public Long getPropertyId() {
         return propertyId;
@@ -56,13 +50,7 @@ public class ContractResponseDTO {
         this.propertyId = propertyId;
     }
 
-    public Long getLandlordId() {
-        return landlordId;
-    }
 
-    public void setLandlordId(Long landlordId) {
-        this.landlordId = landlordId;
-    }
 
     public LocalDateTime getEndDate() {
         return endDate;
@@ -70,5 +58,21 @@ public class ContractResponseDTO {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getTenantMail() {
+        return tenantMail;
+    }
+
+    public void setTenantMail(String tenantMail) {
+        this.tenantMail = tenantMail;
+    }
+
+    public String getLandlordMail() {
+        return landlordMail;
+    }
+
+    public void setLandlordMail(String landlordMail) {
+        this.landlordMail = landlordMail;
     }
 }

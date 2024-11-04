@@ -49,9 +49,9 @@ public class ContractController {
         return new ContractResponseDTO(
                 contract.getId(),
                 contract.getDate(),
-                contract.getTenant().getId(),
+                contract.getTenant().getMail(),
                 contract.getProperty().getId(),
-                contract.getLandlord().getId(),
+                contract.getLandlord().getMail(),
                 contract.getEndDate()
         );
     }
