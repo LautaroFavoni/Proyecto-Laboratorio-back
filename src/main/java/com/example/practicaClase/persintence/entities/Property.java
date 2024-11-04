@@ -28,7 +28,7 @@ public class Property {
     @JsonBackReference
     private Owner owner;
 
-    private String adress;
+    private String address;
 
     private String description;
 
@@ -65,12 +65,12 @@ public class Property {
         this.landlord = landlord;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String adress) {
+        this.address = address;
     }
 
     public String getDescription() {
