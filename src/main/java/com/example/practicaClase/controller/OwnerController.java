@@ -59,6 +59,7 @@ public class OwnerController {
             // Crear y guardar el objeto Owner
             Owner owner = new Owner();
             owner.setMail(dto.getMail());
+            owner.setName(dto.getName());
             // Encriptar la contraseña
             owner.setPassword(passwordEncoder.encode(dto.getPassword()));
             owner.setRole("owner");

@@ -12,13 +12,23 @@ public class TenantForCreation {
     private String role;
     private Long propertyId;
     private Long ownerId;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String name;
 
     // Constructores
     public TenantForCreation() {
     }
 
-    public TenantForCreation(String mail, String password, String role, Long propertyId, Long ownerId) {
+    public TenantForCreation(String mail, String password, String role, String name, Long propertyId, Long ownerId) {
         this.mail = mail;
+        this.name = name;
         this.password = password;
         this.role = "tenant";
         this.propertyId = propertyId;

@@ -14,14 +14,24 @@ public class LandlordForCreation {
     private String role;
     private Long ownerId;
     private List<Long> propertyIds;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String name;
 
     // Constructores
     public LandlordForCreation() {
     }
 
-    public LandlordForCreation(String mail, String password, String role, Long ownerId, List<Long> propertyIds) {
+    public LandlordForCreation(String mail, String password, String role, String name, Long ownerId, List<Long> propertyIds) {
         this.mail = mail;
         this.password = password;
+        this.name = name;
         this.role = "landlord";
         this.ownerId = ownerId;
         this.propertyIds = propertyIds;

@@ -51,13 +51,13 @@ public class PropertyController {
         try {
 
 
-            Tenant tenant = tenantRepository.findById(dto.getTenantId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
-            Landlord landlord = landlordRepository.findById(dto.getLandlordId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
-            Owner owner = ownerRepository.findById(dto.getOwnerId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
+            Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+            Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+            Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
             // Crear y guardar el objeto Property
             Property property = new Property();
             property.setTenant(tenant);
@@ -93,6 +93,7 @@ public class PropertyController {
         dtoResponse.setTenantId(property.getTenant() != null ? property.getTenant().getId() : null);
         dtoResponse.setLandlordId(property.getLandlord() != null ? property.getLandlord().getId() : null);
         dtoResponse.setOwnerId(property.getOwner() != null ? property.getOwner().getId() : null);
+        dtoResponse.setLandordMail(property.getLandlord().getMail());
         return dtoResponse;
     }
 
@@ -146,11 +147,11 @@ public class PropertyController {
             Property property = propertyRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
 
-            Tenant tenant = tenantRepository.findById(dto.getTenantId())
+            Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
-            Landlord landlord = landlordRepository.findById(dto.getLandlordId())
+            Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
-            Owner owner = ownerRepository.findById(dto.getOwnerId())
+            Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
             // Actualizar los campos de la propiedad

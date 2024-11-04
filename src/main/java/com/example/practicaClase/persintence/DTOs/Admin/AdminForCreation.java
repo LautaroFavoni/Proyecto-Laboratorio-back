@@ -11,16 +11,27 @@ public class AdminForCreation {
     @NotBlank(message = "El correo electrónico es obligatorio")
     private String password;
     private String role;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String name;
     private List<Long> ownerIds;
 
     // Constructores
     public AdminForCreation() {
     }
 
-    public AdminForCreation(String mail, String password, String role, List<Long> ownerIds) {
+    public AdminForCreation(String mail, String password, String role, String name, List<Long> ownerIds) {
         this.mail = mail;
+        this.name = name;
         this.password = password;
-        this.role = role;
+        this.role = "admin";
         this.ownerIds = ownerIds;
     }
 

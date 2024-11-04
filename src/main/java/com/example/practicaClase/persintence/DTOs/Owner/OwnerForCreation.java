@@ -18,13 +18,24 @@ public class OwnerForCreation {
     private List<Long> landlordIds;
     private List<Long> tenantIds;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String name;
+
     // Constructores
     public OwnerForCreation() {
     }
 
-    public OwnerForCreation(String mail, String password, String role, Long adminId, List<Long> propertyIds, List<Long> landlordIds, List<Long> tenantIds) {
+    public OwnerForCreation(String mail, String password, String role, String name, Long adminId, List<Long> propertyIds, List<Long> landlordIds, List<Long> tenantIds) {
         this.mail = mail;
         this.password = password;
+        this.name = name;
         this.role = "owner";
         this.adminId = adminId;
         this.propertyIds = propertyIds;

@@ -2,10 +2,9 @@ package com.example.practicaClase.persintence.DTOs.Property;
 
 public class PropertyForCreation {
 
-    private Long tenantId;
-    private Long landlordId;
-    private Long ownerId;
-
+    private String tenantMail;
+    private String landlordMail;
+    private String ownerMail;
     private String address;
 
     private String description;
@@ -14,38 +13,15 @@ public class PropertyForCreation {
     public PropertyForCreation() {
     }
 
-    public PropertyForCreation(Long tenantId, Long landlordId, Long ownerId, String address, String description  ) {
-        this.tenantId = tenantId;
-        this.landlordId = landlordId;
-        this.ownerId = ownerId;
+    public PropertyForCreation(String tenantMail, String landlordMail, String ownerMail, String address, String description  ) {
+        this.tenantMail = tenantMail;
+        this.landlordMail = landlordMail;
+        this.ownerMail = ownerMail;
         this.address = address;
         this.description = description;
     }
 
     // Getters y Setters
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Long getLandlordId() {
-        return landlordId;
-    }
-
-    public void setLandlordId(Long landlordId) {
-        this.landlordId = landlordId;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
 
     public String getAddress() {
         return address;
@@ -61,5 +37,29 @@ public class PropertyForCreation {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTenantMail() {
+        return tenantMail;
+    }
+
+    public void setTenantMail(String tenantMail) {
+        this.tenantMail = tenantMail;
+    }
+
+    public String getLandlordMail() {
+        return landlordMail;
+    }
+
+    public void setLandlordMail(String landlordMail) {
+        this.landlordMail = landlordMail;
+    }
+
+    public String getOwnerMail() {
+        return ownerMail;
+    }
+
+    public void setOwnerMail(String ownerMail) {
+        this.ownerMail = ownerMail;
     }
 }

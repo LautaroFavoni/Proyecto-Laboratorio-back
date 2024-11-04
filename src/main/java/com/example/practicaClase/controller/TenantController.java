@@ -61,6 +61,7 @@ public class TenantController {
             // Crear el nuevo Tenant
             Tenant tenant = new Tenant();
             tenant.setMail(dto.getMail());
+            tenant.setName(dto.getName());
             // Encriptar la contraseña
             tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
             tenant.setRole("tenant");

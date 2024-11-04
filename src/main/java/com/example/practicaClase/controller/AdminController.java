@@ -49,6 +49,7 @@ public class AdminController {
 
             Admin admin = new Admin();
             admin.setMail(dto.getMail());
+            admin.setName(dto.getName());
             admin.setRole("admin");
             // Encriptar la contraseña
             admin.setPassword(passwordEncoder.encode(dto.getPassword()));
