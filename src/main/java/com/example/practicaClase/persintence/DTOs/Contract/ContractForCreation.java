@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class ContractForCreation {
 
     private LocalDateTime date;
-    private Long tenantId;
+    private String tenantMail;
     private Long propertyId;
     private Long landlordId;
     private LocalDateTime endDate;
@@ -16,9 +16,9 @@ public class ContractForCreation {
     public ContractForCreation() {
     }
 
-    public ContractForCreation(LocalDateTime date, Long tenantId, Long propertyId, Long landlordId, LocalDateTime endDate) {
+    public ContractForCreation(LocalDateTime date, String tenantMail, Long propertyId, Long landlordId, LocalDateTime endDate) {
         this.date = date;
-        this.tenantId = tenantId;
+        this.tenantMail = tenantMail;
         this.propertyId = propertyId;
         this.landlordId = landlordId;
         this.endDate = endDate;
@@ -32,13 +32,7 @@ public class ContractForCreation {
         this.date = date;
     }
 
-    public Long getTenantId() {
-        return tenantId;
-    }
 
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
 
     public Long getPropertyId() {
         return propertyId;
@@ -64,4 +58,11 @@ public class ContractForCreation {
         this.endDate = endDate;
     }
 
+    public String getTenantMail() {
+        return tenantMail;
+    }
+
+    public void setTenantMail(String tenantMail) {
+        this.tenantMail = tenantMail;
+    }
 }

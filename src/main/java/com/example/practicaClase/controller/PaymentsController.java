@@ -59,7 +59,7 @@ public class PaymentsController {
         try {
 
             // Buscar el Tenant por ID
-            Tenant tenant = tenantRepository.findById(dto.getTenantId())
+            Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
 
             // Obtener la Property asociada al Tenant

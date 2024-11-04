@@ -7,7 +7,6 @@ public class PropertyResponseDTO {
     private String tenantMail;
     private String landlordMail;
     private String ownerMail;
-    private Long ownerId;
 
     public PropertyResponseDTO(Long id, String adress, String description, String tenantMail, String ownerMail, String landlordMail) {
         this.id = id;
@@ -49,13 +48,6 @@ public class PropertyResponseDTO {
 
 
 
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
-    }
 
     public String getTenantMail() {
         return tenantMail;

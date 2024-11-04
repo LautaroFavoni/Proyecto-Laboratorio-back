@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class PaymentsForCreation {
     private LocalDateTime date; // Utiliza el formato que prefieras para la fecha
-    private Long tenantId;
+    private String tenantMail;
     private Long propertyId;
     private Long landlordId;
     private Double amount;
@@ -14,9 +14,9 @@ public class PaymentsForCreation {
     public PaymentsForCreation() {
     }
 
-    public PaymentsForCreation(LocalDateTime date, Long tenantId, Long propertyId, Long landlordId, Double amount) {
+    public PaymentsForCreation(LocalDateTime date, String tenantMail, Long propertyId, Long landlordId, Double amount) {
         this.date = date;
-        this.tenantId = tenantId;
+        this.tenantMail = tenantMail;
         this.propertyId = propertyId;
         this.landlordId = landlordId;
         this.amount = amount;
@@ -28,14 +28,6 @@ public class PaymentsForCreation {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
     }
 
     public Long getPropertyId() {
@@ -62,4 +54,11 @@ public class PaymentsForCreation {
         this.amount = amount;
     }
 
+    public String getTenantMail() {
+        return tenantMail;
+    }
+
+    public void setTenantMail(String tenantMail) {
+        this.tenantMail = tenantMail;
+    }
 }

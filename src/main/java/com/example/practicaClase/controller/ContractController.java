@@ -64,7 +64,7 @@ public class ContractController {
 
 
             // Buscar el Tenant por ID
-            Tenant tenant = tenantRepository.findById(dto.getTenantId())
+            Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
 
             // Obtener la Property asociada al Tenant
@@ -104,6 +104,30 @@ public class ContractController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(contractDTOs);
     }
+
+    // ContractController.java
+
+    @GetMapping("/by-tenant-mail")
+    public ResponseEntity<?> getContractsByTenantMail(@RequestBody String tenantMail) {
+        // Buscar contratos asociados al correo electrónico del tenant
+        List<Contract> contracts = contractRepository.findByTenant_Mail(tenantMail);
+
+        // Verificar si la lista está vacía y devolver un mensaje adecuado
+        if (contracts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No contracts found for tenant with email: " + tenantMail);
+        }
+
+        // Convertir los contratos encontrados a ContractResponseDTO
+        List<ContractResponseDTO> contractDTOs = contracts.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(contractDTOs);
+    }
+
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContract(@PathVariable Long id) {

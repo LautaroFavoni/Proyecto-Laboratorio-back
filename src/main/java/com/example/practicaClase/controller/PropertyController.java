@@ -96,9 +96,6 @@ public class PropertyController {
         dtoResponse.setLandlordMail(property.getLandlord() != null ? property.getLandlord().getMail() : null);
         dtoResponse.setOwnerMail(property.getOwner() != null ? property.getOwner().getMail() : null);
 
-        // Asignar ID del propietario (owner)
-        dtoResponse.setOwnerId(property.getOwner() != null ? property.getOwner().getId() : null);
-
         return dtoResponse;
     }
 
