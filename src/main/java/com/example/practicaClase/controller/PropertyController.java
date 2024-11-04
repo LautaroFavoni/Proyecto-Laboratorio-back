@@ -90,12 +90,18 @@ public class PropertyController {
         dtoResponse.setId(property.getId());
         dtoResponse.setAdress(property.getAdress());
         dtoResponse.setDescription(property.getDescription());
-        dtoResponse.setTenantId(property.getTenant() != null ? property.getTenant().getId() : null);
-        dtoResponse.setLandlordId(property.getLandlord() != null ? property.getLandlord().getId() : null);
+
+        // Asignar correos electrónicos con comprobación de null
+        dtoResponse.setTenantMail(property.getTenant() != null ? property.getTenant().getMail() : null);
+        dtoResponse.setLandlordMail(property.getLandlord() != null ? property.getLandlord().getMail() : null);
+        dtoResponse.setOwnerMail(property.getOwner() != null ? property.getOwner().getMail() : null);
+
+        // Asignar ID del propietario (owner)
         dtoResponse.setOwnerId(property.getOwner() != null ? property.getOwner().getId() : null);
-        dtoResponse.setLandordMail(property.getLandlord().getMail());
+
         return dtoResponse;
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<PropertyResponseDTO>> all() {
@@ -104,14 +110,18 @@ public class PropertyController {
             dto.setId(property.getId());
             dto.setAdress(property.getAdress());
             dto.setDescription(property.getDescription());
-            dto.setTenantId(property.getTenant() != null ? property.getTenant().getId() : null);
-            dto.setLandlordId(property.getLandlord() != null ? property.getLandlord().getId() : null);
-            dto.setOwnerId(property.getOwner() != null ? property.getOwner().getId() : null);
+
+            // Asignar correos electrónicos en lugar de IDs
+            dto.setTenantMail(property.getTenant() != null ? property.getTenant().getMail() : null);
+            dto.setLandlordMail(property.getLandlord() != null ? property.getLandlord().getMail() : null);
+            dto.setOwnerMail(property.getOwner() != null ? property.getOwner().getMail() : null);
+
             return dto;
         }).toList();
 
         return ResponseEntity.ok(dtoList);
     }
+
 
     // Método DELETE para eliminar una propiedad por ID
     @DeleteMapping("/{id}")

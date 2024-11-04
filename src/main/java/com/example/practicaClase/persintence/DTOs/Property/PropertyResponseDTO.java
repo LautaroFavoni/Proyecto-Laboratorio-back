@@ -4,20 +4,18 @@ public class PropertyResponseDTO {
     private Long id;
     private String adress;
     private String description;
-    private Long tenantId;
-    private Long landlordId;
-
-    private String landordMail;
+    private String tenantMail;
+    private String landlordMail;
+    private String ownerMail;
     private Long ownerId;
 
-    public PropertyResponseDTO(Long id, String adress, String description, Long tenantId, Long landlordId, Long ownerId, String landordMail) {
+    public PropertyResponseDTO(Long id, String adress, String description, String tenantMail, String ownerMail, String landlordMail) {
         this.id = id;
         this.adress = adress;
         this.description = description;
-        this.tenantId = tenantId;
-        this.landlordId = landlordId;
-        this.ownerId = ownerId;
-        this.landordMail = landordMail;
+        this.tenantMail = tenantMail;
+        this.landlordMail = landlordMail;
+        this.ownerMail = ownerMail;
     }
 
     public PropertyResponseDTO( ) {
@@ -44,34 +42,12 @@ public class PropertyResponseDTO {
         return description;
     }
 
-    public String getLandordMail() {
-        return landordMail;
-    }
-
-    public void setLandordMail(String landordMail) {
-        this.landordMail = landordMail;
-    }
-
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Long getTenantId() {
-        return tenantId;
-    }
 
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Long getLandlordId() {
-        return landlordId;
-    }
-
-    public void setLandlordId(Long landlordId) {
-        this.landlordId = landlordId;
-    }
 
     public Long getOwnerId() {
         return ownerId;
@@ -81,4 +57,27 @@ public class PropertyResponseDTO {
         this.ownerId = ownerId;
     }
 
+    public String getTenantMail() {
+        return tenantMail;
+    }
+
+    public void setTenantMail(String tenantMail) {
+        this.tenantMail = tenantMail;
+    }
+
+    public String getLandlordMail() {
+        return landlordMail;
+    }
+
+    public void setLandlordMail(String landlordMail) {
+        this.landlordMail = landlordMail;
+    }
+
+    public String getOwnerMail() {
+        return ownerMail;
+    }
+
+    public void setOwnerMail(String ownerMail) {
+        this.ownerMail = ownerMail;
+    }
 }
