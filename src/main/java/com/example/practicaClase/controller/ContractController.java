@@ -107,7 +107,7 @@ public class ContractController {
 
     // ContractController.java
 
-    @GetMapping("/by-tenant-mail")
+    @PostMapping ("/by-tenant-mail")
     public ResponseEntity<?> getContractsByTenantMail(@RequestBody String tenantMail) {
         // Buscar contratos asociados al correo electrónico del tenant
         List<Contract> contracts = contractRepository.findByTenant_Mail(tenantMail);
