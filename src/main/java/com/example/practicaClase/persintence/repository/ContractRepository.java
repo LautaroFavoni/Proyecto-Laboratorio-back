@@ -8,5 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContractRepository extends JpaRepository<Contract,Long> {
-    List<Contract> findByTenant_Mail(String tenantMail);
+    List<Contract> findByTenantMail(String tenantMail);
+
+    List<Contract> findByTenantId(Long tenantId);
+
 }

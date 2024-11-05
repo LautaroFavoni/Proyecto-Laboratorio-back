@@ -103,8 +103,14 @@ public class ContractController {
 
     @PostMapping ("/by-tenant-mail")
     public ResponseEntity<?> getContractsByTenantMail(@RequestBody String tenantMail) {
-        // Buscar contratos asociados al correo electrónico del tenant
-        List<Contract> contracts = contractRepository.findByTenant_Mail(tenantMail);
+
+
+        Tenant tenant = tenantRepository.findByMail(tenantMail)
+                .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+
+        List<Contract> contracts = contractRepository.findByTenantId(tenant.getId());
+
+
 
         // Verificar si la lista está vacía y devolver un mensaje adecuado
         if (contracts.isEmpty()) {
