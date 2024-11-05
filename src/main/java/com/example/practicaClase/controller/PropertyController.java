@@ -135,14 +135,40 @@ public class PropertyController {
 
             Property property = propertyRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
+
+            // Desvincular la propiedad de Tenant
+            Tenant tenant = property.getTenant();
+            if (tenant != null) {
+                tenant.setProperty(null);
+                tenantRepository.save(tenant);
+            }
+
+            // Desvincular la propiedad de la lista en Landlord
+            Landlord landlord = property.getLandlord();
+            if (landlord != null && landlord.getPropertyList() != null) {
+                landlord.getPropertyList().remove(property);  // Remover la propiedad de la lista
+                landlordRepository.save(landlord);          // Guardar cambios
+            }
+
+            // Desvincular la propiedad de la lista en Owner
+            Owner owner = property.getOwner();
+            if (owner != null && owner.getPropertyList() != null) {
+                owner.getPropertyList().remove(property);     // Remover la propiedad de la lista
+                ownerRepository.save(owner);                // Guardar cambios
+            }
+
+            // Eliminar la propiedad después de desvincular las relaciones
             propertyRepository.delete(property);
             return ResponseEntity.ok("Property deleted successfully");
+
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar la propiedad");
         }
     }
+
+
 
     // Método PUT para actualizar una propiedad existente
     @PutMapping("/{id}")
