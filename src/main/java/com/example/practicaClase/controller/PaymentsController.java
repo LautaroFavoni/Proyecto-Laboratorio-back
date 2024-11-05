@@ -3,6 +3,7 @@ package com.example.practicaClase.controller;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Payments.PaymentsForCreation;
 import com.example.practicaClase.persintence.DTOs.Payments.PaymentsResponseDTO;
+import com.example.practicaClase.persintence.DTOs.Payments.TenantMailDTO;
 import com.example.practicaClase.persintence.entities.Landlord;
 import com.example.practicaClase.persintence.entities.Payments;
 import com.example.practicaClase.persintence.entities.Property;
@@ -116,6 +117,34 @@ public class PaymentsController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Pago.");
+        }
+    }
+
+    @PostMapping("/by-tenant-mail")
+    public ResponseEntity<?> getPaymentsByTenantMail(@RequestBody TenantMailDTO dto) {
+        try {
+            // Buscar el Tenant por su correo electrónico
+            Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+
+            // Obtener los pagos asociados al Tenant
+            List<Payments> payments = paymentsRepository.findByTenantId(tenant.getId());
+
+            // Verificar si la lista está vacía y devolver un mensaje adecuado
+            if (payments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No payments found for tenant with email: " + dto.getTenantMail());
+            }
+
+            // Convertir los pagos encontrados a PaymentsResponseDTO
+            List<PaymentsResponseDTO> paymentDTOs = payments.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(paymentDTOs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los pagos.");
         }
     }
 
