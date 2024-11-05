@@ -110,22 +110,27 @@ public class ContractController {
         Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                 .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
 
-        List<Contract> contracts = contractRepository.findByTenantId(tenant.getId());
+        try {
+            List<Contract> contracts = contractRepository.findByTenantId(tenant.getId());
 
 
+            // Verificar si la lista está vacía y devolver un mensaje adecuado
+            if (contracts.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No contracts found for tenant with email: " + dto.getTenantMail());
+            }
 
-        // Verificar si la lista está vacía y devolver un mensaje adecuado
-        if (contracts.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No contracts found for tenant with email: " + dto.getTenantMail());
+            // Convertir los contratos encontrados a ContractResponseDTO
+            List<ContractResponseDTO> contractDTOs = contracts.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(contractDTOs);
+
         }
-
-        // Convertir los contratos encontrados a ContractResponseDTO
-        List<ContractResponseDTO> contractDTOs = contracts.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(contractDTOs);
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Contrato");
+        }
     }
 
 
