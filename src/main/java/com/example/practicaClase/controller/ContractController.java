@@ -35,12 +35,6 @@ public class ContractController {
     private LandlordRepository landlordRepository;
 
 
-    @PostMapping ("new-entidades-completas")
-    public ResponseEntity<String> New(@RequestBody Contract contract) {
-
-        contractRepository.save(contract);
-        return ResponseEntity.ok("contract created successfully");
-    }
 
     @Transactional
 

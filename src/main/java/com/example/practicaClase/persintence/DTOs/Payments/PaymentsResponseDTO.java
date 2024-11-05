@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 public class PaymentsResponseDTO {
     private Long id; // Asumiendo que tienes un ID en Payments
     private LocalDateTime date;
-    private Long tenantId;
-    private Long propertyId;
-    private Long landlordId;
+    private String tenantMail;
+    private String propertyDescription;
+    private String landlordMail;
     private Double amount;
 
-    public PaymentsResponseDTO(Long id, LocalDateTime date, Long tenantId, Long propertyId, Long landlordId, Double amount) {
+    public PaymentsResponseDTO(Long id, LocalDateTime date, String tenantMail, String propertyDescription, String landlordMail, Double amount) {
         this.id = id;
         this.date = date;
-        this.tenantId = tenantId;
-        this.propertyId = propertyId;
-        this.landlordId = landlordId;
+        this.tenantMail = tenantMail;
+        this.propertyDescription = propertyDescription;
+        this.landlordMail = landlordMail;
         this.amount = amount;
     }
 
@@ -36,29 +36,7 @@ public class PaymentsResponseDTO {
         this.date = date;
     }
 
-    public Long getTenantId() {
-        return tenantId;
-    }
 
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Long getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
-    }
-
-    public Long getLandlordId() {
-        return landlordId;
-    }
-
-    public void setLandlordId(Long landlordId) {
-        this.landlordId = landlordId;
-    }
 
     public Double getAmount() {
         return amount;
@@ -66,5 +44,31 @@ public class PaymentsResponseDTO {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getTenantMail() {
+        return tenantMail;
+    }
+
+    public void setTenantMail(String tenantMail) {
+        this.tenantMail = tenantMail;
+    }
+
+
+
+    public String getLandlordMail() {
+        return landlordMail;
+    }
+
+    public void setLandlordMail(String landlordMail) {
+        this.landlordMail = landlordMail;
+    }
+
+    public String getPropertyDescription() {
+        return propertyDescription;
+    }
+
+    public void setPropertyDescription(String propertyDescription) {
+        this.propertyDescription = propertyDescription;
     }
 }

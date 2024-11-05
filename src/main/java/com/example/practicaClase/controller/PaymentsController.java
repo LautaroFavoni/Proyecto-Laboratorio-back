@@ -44,9 +44,9 @@ public class PaymentsController {
         return new PaymentsResponseDTO(
                 payment.getId(),
                 payment.getDate(),
-                payment.getTenant().getId(),
-                payment.getProperty().getId(),
-                payment.getLandlord().getId(),
+                payment.getTenant().getMail(),
+                payment.getProperty().getDescription(),
+                payment.getLandlord().getMail(),
                 payment.getAmount()
         );
     }
