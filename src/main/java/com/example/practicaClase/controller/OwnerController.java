@@ -130,6 +130,43 @@ public class OwnerController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el Owner.");
         }
     }
+
+    // Método DELETE para eliminar un Owner por ID
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteOwner(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        try {
+            // Extraer el rol del token JWT
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Verificar si el rol es "admin" o "owner"
+            if (!"admin".equals(role) && !"owner".equals(role)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            }
+
+            // Buscar el Owner a eliminar
+            Owner owner = ownerRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
+
+            // Desvincular el Owner de su Admin asociado, si existe
+            Admin admin = owner.getAdmin();
+            if (admin != null) {
+                admin.getOwnerList().remove(owner);
+                adminRepository.save(admin); // Guardar los cambios en el Admin
+            }
+
+            // Eliminar el Owner de la base de datos
+            ownerRepository.delete(owner);
+
+            return ResponseEntity.ok("Owner deleted successfully");
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Owner.");
+        }
+    }
+
 }
 
 

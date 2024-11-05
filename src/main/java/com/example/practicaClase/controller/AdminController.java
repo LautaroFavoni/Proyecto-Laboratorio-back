@@ -89,4 +89,42 @@ public class AdminController {
 
         return ResponseEntity.ok(adminRepository.findAll());
     }
+
+    // Método DELETE para eliminar un Admin por ID
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAdmin(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        try {
+            // Extraer el rol del token
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Validar si el rol es "admin"
+            if (!"admin".equals(role)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            }
+
+            // Buscar el Admin a eliminar
+            Admin admin = adminRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
+
+            // Desvincular todos los Owners asociados al Admin
+            List<Owner> owners = admin.getOwnerList();
+            if (owners != null) {
+                for (Owner owner : owners) {
+                    owner.setAdmin(null); // Eliminar la referencia al Admin
+                    ownerRepository.save(owner); // Guardar los cambios en cada Owner
+                }
+                admin.getOwnerList().clear(); // Limpiar la lista de Owners en el Admin
+            }
+
+            // Eliminar el Admin después de desvincular las relaciones
+            adminRepository.delete(admin);
+            return ResponseEntity.ok("Admin deleted successfully");
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Admin");
+        }
+    }
 }

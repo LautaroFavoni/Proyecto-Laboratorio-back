@@ -86,6 +86,52 @@ public class LandlordController {
         }
     }
 
+    // Método DELETE para eliminar un Landlord por ID
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLandlord(@PathVariable Long id, @RequestHeader(value = "Authorization") String token) {
+        try {
+            // Extraer el rol del token
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Validar si el rol es "admin"
+            if (!"admin".equals(role)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            }
+
+            // Buscar el Landlord a eliminar
+            Landlord landlord = landlordRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+
+            // Desvincular las propiedades asociadas al Landlord
+            List<Property> properties = landlord.getPropertyList();
+            if (properties != null) {
+                for (Property property : properties) {
+                    property.setLandlord(null); // Desvincular la propiedad del Landlord
+                    propertyRepository.save(property); // Guardar el cambio en la propiedad
+                }
+                landlord.getPropertyList().clear(); // Limpiar la lista de propiedades en el Landlord
+            }
+
+            // Desvincular el Landlord del Owner asociado
+            Owner owner = landlord.getOwner();
+            if (owner != null) {
+                owner.getLandlordList().remove(landlord); // Eliminar el Landlord de la lista del Owner
+                ownerRepository.save(owner); // Guardar el cambio en el Owner
+            }
+
+            // Eliminar el Landlord después de desvincular las relaciones
+            landlordRepository.delete(landlord);
+            return ResponseEntity.ok("Landlord deleted successfully");
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Landlord");
+        }
+    }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateLandlord(@PathVariable Long id, @Valid @RequestBody LandlordForCreation dto,@RequestHeader(value = "Authorization") String token) {
