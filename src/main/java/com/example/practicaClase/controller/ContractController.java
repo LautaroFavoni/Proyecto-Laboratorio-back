@@ -3,6 +3,8 @@ package com.example.practicaClase.controller;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Contract.ContractForCreation;
 import com.example.practicaClase.persintence.DTOs.Contract.ContractResponseDTO;
+import com.example.practicaClase.persintence.DTOs.Payments.TenantMailDTO;
+
 import com.example.practicaClase.persintence.entities.*;
 import com.example.practicaClase.persintence.repository.ContractRepository;
 import com.example.practicaClase.persintence.repository.LandlordRepository;
@@ -102,10 +104,10 @@ public class ContractController {
     // ContractController.java
 
     @PostMapping ("/by-tenant-mail")
-    public ResponseEntity<?> getContractsByTenantMail(@RequestBody String tenantMail) {
+    public ResponseEntity<?> getContractsByTenantMail(@RequestBody TenantMailDTO dto) {
 
 
-        Tenant tenant = tenantRepository.findByMail(tenantMail)
+        Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                 .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
 
         List<Contract> contracts = contractRepository.findByTenantId(tenant.getId());
@@ -115,7 +117,7 @@ public class ContractController {
         // Verificar si la lista está vacía y devolver un mensaje adecuado
         if (contracts.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No contracts found for tenant with email: " + tenantMail);
+                    .body("No contracts found for tenant with email: " + dto.getTenantMail());
         }
 
         // Convertir los contratos encontrados a ContractResponseDTO
