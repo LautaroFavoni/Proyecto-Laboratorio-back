@@ -81,7 +81,7 @@ public class PropertyController {
             return ResponseEntity.ok(dtoResponse);
         }
         catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el PAGO.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la propiedad");
         }
     }
 
@@ -119,14 +119,17 @@ public class PropertyController {
         return ResponseEntity.ok(dtoList);
     }
 
+    private boolean hasAdminOrOwnerRole(String token) {
+        String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+        return "admin".equals(role) || "owner".equals(role);
+    }
+
 
     // Método DELETE para eliminar una propiedad por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProperty(@PathVariable Long id, @RequestHeader("Authorization") String token) {
         try {
-            // Validar el rol en el token
-            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
-            if (!"admin".equals(role) && !"owner".equals(role)) {
+            if (!hasAdminOrOwnerRole(token)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
             }
 
