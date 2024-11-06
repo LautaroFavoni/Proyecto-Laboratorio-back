@@ -183,29 +183,28 @@ public class PropertyController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
             }
 
+            // Buscar la propiedad
             Property property = propertyRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
 
-            System.out.println("Tenant mail in DTO: " + dto.getTenantMail()); // Verificar el mail en DTO
+            // Actualizar tenant, landlord, owner
             Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
-
-            System.out.println("Found Tenant: " + tenant.getMail()); // Confirmar que se obtiene el Tenant correcto
-
             Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
             Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
-            // Actualizar los campos de la propiedad
             property.setTenant(tenant);
             property.setLandlord(landlord);
             property.setOwner(owner);
+
+            // Actualizar otros campos
             property.setAddress(dto.getAddress());
             property.setDescription(dto.getDescription());
 
+            // Guardar cambios
             propertyRepository.save(property);
-            propertyRepository.flush(); // Sincronizar cambios con la base de datos
             PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
 
             return ResponseEntity.ok(dtoResponse);
@@ -215,6 +214,7 @@ public class PropertyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la propiedad");
         }
     }
+
 
     @PostMapping("/by-tenant-mail")
     public ResponseEntity<?> getPropertiesByTenantMail(@RequestBody TenantMailDTO dto) {
