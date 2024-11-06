@@ -186,8 +186,12 @@ public class PropertyController {
             Property property = propertyRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
 
+            System.out.println("Tenant mail in DTO: " + dto.getTenantMail()); // Verificar el mail en DTO
             Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+
+            System.out.println("Found Tenant: " + tenant.getMail()); // Confirmar que se obtiene el Tenant correcto
+
             Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
             Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
@@ -201,6 +205,7 @@ public class PropertyController {
             property.setDescription(dto.getDescription());
 
             propertyRepository.save(property);
+            propertyRepository.flush(); // Sincronizar cambios con la base de datos
             PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
 
             return ResponseEntity.ok(dtoResponse);
@@ -210,6 +215,7 @@ public class PropertyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la propiedad");
         }
     }
+
     @PostMapping("/by-tenant-mail")
     public ResponseEntity<?> getPropertiesByTenantMail(@RequestBody TenantMailDTO dto) {
         try {
