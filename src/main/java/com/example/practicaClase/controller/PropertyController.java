@@ -172,22 +172,19 @@ public class PropertyController {
     }
 
 
-
+    @Transactional
     // Método PUT para actualizar una propiedad existente
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProperty(@PathVariable Long id, @RequestBody PropertyForCreation dto, @RequestHeader("Authorization") String token) {
         try {
-            // Validar el rol en el token
             String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
             if (!"admin".equals(role) && !"owner".equals(role)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
             }
 
-            // Buscar la propiedad
             Property property = propertyRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Property not found"));
 
-            // Actualizar tenant, landlord, owner
             Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
             Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
@@ -195,18 +192,18 @@ public class PropertyController {
             Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
+            // Asigna la propiedad de Tenant y Property en ambos lados
             property.setTenant(tenant);
+            tenant.setProperty(property); // Actualiza la referencia en Tenant también
+
             property.setLandlord(landlord);
             property.setOwner(owner);
-
-            // Actualizar otros campos
             property.setAddress(dto.getAddress());
             property.setDescription(dto.getDescription());
 
-            // Guardar cambios
             propertyRepository.save(property);
-            PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
 
+            PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
             return ResponseEntity.ok(dtoResponse);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -214,6 +211,7 @@ public class PropertyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la propiedad");
         }
     }
+
 
 
     @PostMapping("/by-tenant-mail")
