@@ -3,6 +3,7 @@ package com.example.practicaClase.controller;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
 import com.example.practicaClase.persintence.DTOs.Contract.ContractForCreation;
 import com.example.practicaClase.persintence.DTOs.Contract.ContractResponseDTO;
+import com.example.practicaClase.persintence.DTOs.Landlord.LandlordMailDTO;
 import com.example.practicaClase.persintence.DTOs.Payments.TenantMailDTO;
 
 import com.example.practicaClase.persintence.entities.*;
@@ -132,6 +133,35 @@ public class ContractController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Contrato");
         }
     }
+
+    @PostMapping("/by-landlord-mail")
+    public ResponseEntity<?> getContractsByLandlordMail(@RequestBody LandlordMailDTO dto) {
+        try {
+            // Buscar el Landlord por su correo electrónico
+            Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+
+            // Obtener los contratos asociados al Landlord
+            List<Contract> contracts = contractRepository.findByLandlordId(landlord.getId());
+
+            // Verificar si la lista está vacía y devolver un mensaje adecuado
+            if (contracts.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No contracts found for landlord with email: " + dto.getLandlordMail());
+            }
+
+            // Convertir los contratos encontrados a ContractResponseDTO
+            List<ContractResponseDTO> contractDTOs = contracts.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(contractDTOs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los contratos.");
+        }
+    }
+
 
 
 

@@ -12,4 +12,6 @@ public interface ContractRepository extends JpaRepository<Contract,Long> {
 
     List<Contract> findByTenantId(Long tenantId);
 
+
+    List<Contract> findByLandlordId(Long id);
 }
