@@ -4,6 +4,7 @@ package com.example.practicaClase.controller;
 
 import com.example.practicaClase.Config.JwtService;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
+import com.example.practicaClase.persintence.DTOs.Payments.TenantMailDTO;
 import com.example.practicaClase.persintence.DTOs.Property.PropertyForCreation;
 import com.example.practicaClase.persintence.DTOs.Property.PropertyResponseDTO;
 import com.example.practicaClase.persintence.entities.Landlord;
@@ -205,6 +206,31 @@ public class PropertyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la propiedad");
+        }
+    }
+    @PostMapping("/by-tenant-mail")
+    public ResponseEntity<?> getPropertiesByTenantMail(@RequestBody TenantMailDTO dto) {
+        try {
+            // Buscar el Tenant por su correo electrónico
+            Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+
+            // Obtener la propiedad asociada al Tenant
+            Property property = tenant.getProperty();
+
+            // Verificar si el tenant tiene propiedades asociadas y devolver un mensaje adecuado
+            if (property == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No property found for tenant with email: " + dto.getTenantMail());
+            }
+
+            // Convertir la propiedad encontrada a PropertyResponseDTO
+            PropertyResponseDTO propertyDTO = getPropertyResponseDTO(property);
+
+            return ResponseEntity.ok(propertyDTO);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener la propiedad.");
         }
     }
 
