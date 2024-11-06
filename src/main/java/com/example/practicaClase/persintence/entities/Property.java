@@ -1,6 +1,7 @@
 package com.example.practicaClase.persintence.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,9 +13,9 @@ public class Property {
 
     // Otros atributos de Property
 
-    @OneToOne(mappedBy = "property")
+    @OneToOne
     @JoinColumn(name = "tenant_id")
-    @JsonBackReference
+    @JsonManagedReference // Esto ayudará a manejar referencias circulares en JSON
     private Tenant tenant;
 
     @ManyToOne

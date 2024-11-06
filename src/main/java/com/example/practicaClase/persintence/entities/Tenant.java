@@ -7,9 +7,8 @@ import jakarta.persistence.*;
 @Entity
 public class Tenant extends User {
 
-    @OneToOne
-
-    @JoinColumn(name = "property_id")
+    @OneToOne(mappedBy = "tenant")
+    @JsonBackReference
     private Property property;
 
     @ManyToOne

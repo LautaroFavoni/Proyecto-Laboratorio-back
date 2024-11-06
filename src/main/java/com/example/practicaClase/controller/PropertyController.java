@@ -173,7 +173,6 @@ public class PropertyController {
 
 
     @Transactional
-    // Método PUT para actualizar una propiedad existente
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProperty(@PathVariable Long id, @RequestBody PropertyForCreation dto, @RequestHeader("Authorization") String token) {
         try {
@@ -192,9 +191,9 @@ public class PropertyController {
             Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
-            // Asigna la propiedad de Tenant y Property en ambos lados
+            // Asigna el tenant y actualiza la referencia en ambas entidades
             property.setTenant(tenant);
-            tenant.setProperty(property); // Actualiza la referencia en Tenant también
+            tenant.setProperty(property); // Esto asegura la sincronización de ambas entidades
 
             property.setLandlord(landlord);
             property.setOwner(owner);
@@ -202,8 +201,8 @@ public class PropertyController {
             property.setDescription(dto.getDescription());
 
             propertyRepository.save(property);
-
             PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
+
             return ResponseEntity.ok(dtoResponse);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -211,6 +210,7 @@ public class PropertyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la propiedad");
         }
     }
+
 
 
 
