@@ -118,6 +118,8 @@ public class OwnerController {
             // Actualizar los datos del Owner
             existingOwner.setMail(dto.getMail());
             existingOwner.setPassword(passwordEncoder.encode(dto.getPassword()));
+            existingOwner.setName(dto.getName());
+
             existingOwner.setAdmin(admin);
 
             // Guardar los cambios en la base de datos

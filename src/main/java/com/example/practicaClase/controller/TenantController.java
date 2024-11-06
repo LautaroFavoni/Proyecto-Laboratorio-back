@@ -119,6 +119,7 @@ public class TenantController {
 
             // Actualizar los campos del Tenant
             tenant.setMail(dto.getMail());
+            tenant.setName(dto.getName());
             tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
             tenant.setOwner(owner);
             tenant.setProperty(property);
