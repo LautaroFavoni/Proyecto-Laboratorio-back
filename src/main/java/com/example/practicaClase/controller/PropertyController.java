@@ -4,6 +4,7 @@ package com.example.practicaClase.controller;
 
 import com.example.practicaClase.Config.JwtService;
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
+import com.example.practicaClase.persintence.DTOs.Landlord.LandlordMailDTO;
 import com.example.practicaClase.persintence.DTOs.Payments.TenantMailDTO;
 import com.example.practicaClase.persintence.DTOs.Property.PropertyForCreation;
 import com.example.practicaClase.persintence.DTOs.Property.PropertyResponseDTO;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/property")
@@ -86,7 +88,7 @@ public class PropertyController {
         }
     }
 
-    private static PropertyResponseDTO getPropertyResponseDTO(Property property) {
+    private PropertyResponseDTO getPropertyResponseDTO(Property property) {
         PropertyResponseDTO dtoResponse = new PropertyResponseDTO();
         dtoResponse.setId(property.getId());
         dtoResponse.setAddress(property.getAddress());
@@ -233,6 +235,35 @@ public class PropertyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener la propiedad.");
         }
     }
+
+    @PostMapping("/by-landlord-mail")
+    public ResponseEntity<?> getPropertiesByLandlordMail(@RequestBody LandlordMailDTO dto) {
+        try {
+            // Buscar el Landlord por su correo electrónico
+            Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+
+            // Obtener las propiedades asociadas al Landlord
+            List<Property> properties = landlord.getPropertyList();
+
+            // Verificar si la lista está vacía y devolver un mensaje adecuado
+            if (properties.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No properties found for landlord with email: " + dto.getLandlordMail());
+            }
+
+            // Convertir las propiedades encontradas a PropertyResponseDTO
+            List<PropertyResponseDTO> propertyDTOs = properties.stream()
+                    .map(this::getPropertyResponseDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(propertyDTOs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener las propiedades.");
+        }
+    }
+
 
 
 
