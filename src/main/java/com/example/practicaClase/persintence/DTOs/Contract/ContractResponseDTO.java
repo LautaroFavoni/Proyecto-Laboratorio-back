@@ -9,16 +9,21 @@ public class ContractResponseDTO {
 
     private  String tenantMail;
 
+    private String propertyDescription;
+    private String landlordMail;
+
     private LocalDateTime endDate;
 
     // Constructores
     public ContractResponseDTO() {}
 
-    public ContractResponseDTO(Long id, LocalDateTime date, String tenantMail, Long propertyId, String landlordMail, LocalDateTime endDate) {
+    public ContractResponseDTO(Long id, LocalDateTime date, String tenantMail, String propertyDescription, String landlordMail, LocalDateTime endDate) {
         this.id = id;
         this.date = date;
         this.tenantMail = tenantMail;
         this.endDate = endDate;
+        this.landlordMail = landlordMail;
+        this.propertyDescription = propertyDescription;
     }
 
     // Getters y Setters
@@ -59,4 +64,19 @@ public class ContractResponseDTO {
         this.tenantMail = tenantMail;
     }
 
+    public String getPropertyDescription() {
+        return propertyDescription;
+    }
+
+    public void setPropertyDescription(String propertyDescription) {
+        this.propertyDescription = propertyDescription;
+    }
+
+    public String getLandlordMail() {
+        return landlordMail;
+    }
+
+    public void setLandlordMail(String landlordMail) {
+        this.landlordMail = landlordMail;
+    }
 }

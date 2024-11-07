@@ -46,7 +46,7 @@ public class ContractController {
                 contract.getId(),
                 contract.getDate(),
                 contract.getTenant().getMail(),
-                contract.getProperty().getId(),
+                contract.getProperty().getDescription(),
                 contract.getLandlord().getMail(),
                 contract.getEndDate()
         );
