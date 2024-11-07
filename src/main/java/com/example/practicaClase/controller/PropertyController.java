@@ -52,13 +52,15 @@ public class PropertyController {
 
     public ResponseEntity<?> createProperty(@RequestBody PropertyForCreation dto) {
         try {
+
+
+
             Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
             Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
             Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
-
             // Crear y guardar el objeto Property
             Property property = new Property();
             property.setTenant(tenant);
@@ -67,20 +69,19 @@ public class PropertyController {
             property.setAddress(dto.getAddress());
             property.setDescription(dto.getDescription());
 
-            // Asegurarse de que el lado inverso de la relación también esté establecido
             tenant.setProperty(property);
 
-            // Guardar la propiedad
+
             propertyRepository.save(property);
 
             PropertyResponseDTO dtoResponse = getPropertyResponseDTO(property);
 
             return ResponseEntity.ok(dtoResponse);
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la propiedad");
         }
     }
-
 
     private PropertyResponseDTO getPropertyResponseDTO(Property property) {
         PropertyResponseDTO dtoResponse = new PropertyResponseDTO();
