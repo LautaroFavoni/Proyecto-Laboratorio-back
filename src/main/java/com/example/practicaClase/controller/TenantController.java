@@ -93,6 +93,22 @@ public class TenantController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTenantById(@PathVariable Long id) {
+        try {
+            // Buscar el Tenant por ID
+            Tenant tenant = tenantRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+
+            // Devolver el Tenant encontrado
+            return ResponseEntity.ok(tenant);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el Tenant.");
+        }
+    }
+
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteTenant(@PathVariable Long id, @RequestHeader(value = "Authorization") String token) {

@@ -89,6 +89,23 @@ public class LandlordController {
         }
     }
 
+    // Método GET para obtener un Landlord por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getLandlordById(@PathVariable Long id) {
+        try {
+            // Buscar el Landlord por ID
+            Landlord landlord = landlordRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+
+            // Devolver el Landlord encontrado
+            return ResponseEntity.ok(landlord);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener el Landlord.");
+        }
+    }
+
     // Método DELETE para eliminar un Landlord por ID
     @Transactional
     @DeleteMapping("/{id}")
