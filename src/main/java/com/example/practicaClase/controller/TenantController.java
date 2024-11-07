@@ -93,6 +93,50 @@ public class TenantController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> deleteTenant(@PathVariable Long id, @RequestHeader(value = "Authorization") String token) {
+        try {
+            // Extraer el rol del token JWT
+            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
+
+            // Verificar si el rol es "admin" o "owner"
+            if (!"admin".equals(role) && !"owner".equals(role)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
+            }
+
+            // Buscar el Tenant por ID
+            Tenant tenant = tenantRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
+
+            // Remover el Tenant de la lista de Tenants del Owner (si existe)
+            Owner owner = tenant.getOwner();
+            if (owner != null && owner.getTenantList() != null) {
+                owner.getTenantList().remove(tenant);
+                ownerRepository.save(owner);  // Actualizar el Owner sin el Tenant en su lista
+            }
+
+            // Limpiar la relación entre el Tenant y la Property (si existe)
+            Property property = tenant.getProperty();
+            if (property != null) {
+                property.setTenant(null);
+                propertyRepository.save(property);  // Actualizar la Property sin el Tenant
+            }
+
+            // Eliminar el Tenant
+            tenantRepository.delete(tenant);
+
+            // Responder con éxito
+            return ResponseEntity.ok("Tenant eliminado exitosamente.");
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Tenant.");
+        }
+    }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTenant(@PathVariable Long id, @Valid @RequestBody TenantForCreation dto,  @RequestHeader(value = "Authorization") String token) {
         try {

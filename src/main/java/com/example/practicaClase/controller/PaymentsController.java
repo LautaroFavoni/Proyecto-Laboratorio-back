@@ -125,6 +125,8 @@ public class PaymentsController {
     @PostMapping("/by-tenant-mail")
     public ResponseEntity<?> getPaymentsByTenantMail(@RequestBody TenantMailDTO dto) {
         try {
+
+
             // Buscar el Tenant por su correo electrónico
             Tenant tenant = tenantRepository.findByMail(dto.getTenantMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
@@ -149,5 +151,59 @@ public class PaymentsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los pagos.");
         }
     }
+
+    @PostMapping("/by-landlord-mail")
+    public ResponseEntity<?> getPaymentsByLandlord(@RequestBody LandlordMailDTO dto) {
+        try {
+            Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found with email: " + dto.getLandlordMail()));
+
+            // Obtener los pagos asociados al Landlord
+            List<Payments> payments = paymentsRepository.findByLandlordId(landlord.getId());
+
+            if (payments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No payments found for landlord with email: " + dto.getLandlordMail());
+            }
+
+            List<PaymentsResponseDTO> paymentDTOs = payments.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(paymentDTOs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los pagos.");
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePayment(@PathVariable Long id, @RequestBody PaymentsForCreation dto) {
+        try {
+            // Buscar el Payment por ID
+            Payments payment = paymentsRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Payment not found with id: " + id));
+
+            // Actualizar los datos del pago
+            payment.setAmount(dto.getAmount());
+            if (dto.getDate() != null) {
+                payment.setDate(dto.getDate());
+            }
+
+            // Guardar los cambios en la base de datos
+            paymentsRepository.save(payment);
+
+            // Convertir a DTO y devolver la respuesta
+            PaymentsResponseDTO responseDTO = convertToDTO(payment);
+            return ResponseEntity.ok(responseDTO);
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el pago.");
+        }
+    }
+
+
 
 }

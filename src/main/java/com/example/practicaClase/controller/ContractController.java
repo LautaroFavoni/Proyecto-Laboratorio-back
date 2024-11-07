@@ -38,7 +38,6 @@ public class ContractController {
     private LandlordRepository landlordRepository;
 
 
-
     @Transactional
 
     // Método para convertir un Contract en un ContractResponseDTO
@@ -88,11 +87,11 @@ public class ContractController {
             // Convertir a DTO para la respuesta
             ContractResponseDTO responseDTO = convertToDTO(contract);
             return ResponseEntity.ok(responseDTO);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Contrato");
         }
     }
+
     @GetMapping("/all")
     public ResponseEntity<List<ContractResponseDTO>> all() {
         List<Contract> contracts = contractRepository.findAll();
@@ -104,7 +103,7 @@ public class ContractController {
 
     // ContractController.java
 
-    @PostMapping ("/by-tenant-mail")
+    @PostMapping("/by-tenant-mail")
     public ResponseEntity<?> getContractsByTenantMail(@RequestBody TenantMailDTO dto) {
 
 
@@ -128,8 +127,7 @@ public class ContractController {
 
             return ResponseEntity.ok(contractDTOs);
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el Contrato");
         }
     }
@@ -163,9 +161,6 @@ public class ContractController {
     }
 
 
-
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContract(@PathVariable Long id) {
         try {
@@ -184,5 +179,34 @@ public class ContractController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateContractDates(@PathVariable Long id, @RequestBody ContractForCreation dto) {
+        try {
+            // Buscar el contrato por ID
+            Contract contract = contractRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Contract not found"));
 
+            // Actualizar la fecha de inicio si se proporciona una nueva en el DTO
+            if (dto.getDate() != null) {
+                contract.setDate(dto.getDate());
+            }
+
+            // Actualizar la fecha de fin si se proporciona en el DTO
+            if (dto.getEndDate() != null) {
+                contract.setEndDate(dto.getEndDate());
+            }
+
+            // Guardar el contrato actualizado
+            contractRepository.save(contract);
+
+            // Convertir a DTO para la respuesta
+            ContractResponseDTO responseDTO = convertToDTO(contract);
+            return ResponseEntity.ok(responseDTO);
+
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+
+    }
 }
