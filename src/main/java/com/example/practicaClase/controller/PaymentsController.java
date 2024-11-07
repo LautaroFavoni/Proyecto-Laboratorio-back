@@ -159,7 +159,7 @@ public class PaymentsController {
             // Obtener los correos electrónicos de los Tenants asociados a ese Landlord
             List<String> tenantMails = tenantRepository.findTenantMailsByLandlordId(landlord.getId());
 
-            // Si no se encontraron Tenants, devolver un mensaje adecuado
+            // Si no se encontraron Tenants, devolver un mensaje adecuad
             if (tenantMails.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No tenants found for landlord with email: " + landlordMail.getLandlordMail());
