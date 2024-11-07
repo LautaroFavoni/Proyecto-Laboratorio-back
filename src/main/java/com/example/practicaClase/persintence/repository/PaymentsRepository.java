@@ -10,5 +10,5 @@ public interface PaymentsRepository extends JpaRepository <Payments, Long> {
 
     List<Payments> findByTenantId(Long tenantId);
 
-    List<Payments> findByTenantIdIn(List<Long> tenantIds);
+
 }
