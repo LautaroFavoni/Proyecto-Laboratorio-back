@@ -144,8 +144,8 @@ public class TenantController {
             // Extraer el rol del token JWT
             String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
 
-            // Verificar si el rol es "admin" o "owner"
-            if (!"admin".equals(role) && !"owner".equals(role)) {
+            //Validar role
+            if (!List.of("admin", "owner", "landlord").contains(role)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
             }
             // Buscar el Tenant por ID

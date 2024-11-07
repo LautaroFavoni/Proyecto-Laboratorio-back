@@ -143,8 +143,8 @@ public class LandlordController {
             //Extraer el rol del token
             String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
 
-            // Validar si el rol es "admin"
-            if (!"admin".equals(role)) {
+            //Validar role
+            if (!List.of("admin", "owner", "landlord").contains(role)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
             }
             // Buscar el Landlord por ID
