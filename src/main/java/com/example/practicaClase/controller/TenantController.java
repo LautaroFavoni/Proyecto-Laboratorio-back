@@ -107,9 +107,6 @@ public class TenantController {
             Tenant tenant = tenantRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
 
-            // Buscar el Owner por ID
-            Owner owner = ownerRepository.findById(dto.getOwnerId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
             // Buscar Property por ID, permitiendo que la propiedad sea null
             Property property = dto.getPropertyId() != null ?
@@ -121,7 +118,7 @@ public class TenantController {
             tenant.setMail(dto.getMail());
             tenant.setName(dto.getName());
             tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
-            tenant.setOwner(owner);
+            tenant.setOwner(tenant.getOwner());
             tenant.setProperty(property);
 
             // Guardar el Tenant actualizado en la base de datos
@@ -133,14 +130,6 @@ public class TenantController {
                 propertyRepository.save(property);
             }
 
-            // Agregar el Tenant a la lista de Tenants del Owner, asegurando que la lista no sea null
-            if (owner.getTenantList() == null) {
-                owner.setTenantList(new ArrayList<>());
-            }
-            if (!owner.getTenantList().contains(tenant)) {
-                owner.getTenantList().add(tenant);
-            }
-            ownerRepository.save(owner);
 
             // Devolver respuesta
             return ResponseEntity.ok(tenant);
