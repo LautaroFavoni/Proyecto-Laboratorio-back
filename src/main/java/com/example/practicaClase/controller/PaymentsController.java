@@ -15,6 +15,7 @@ import com.example.practicaClase.persintence.repository.PropertyRepository;
 import com.example.practicaClase.persintence.repository.TenantRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -159,7 +160,7 @@ public class PaymentsController {
             // Obtener los correos electrónicos de los Tenants asociados a ese Landlord
             List<String> tenantMails = tenantRepository.findTenantMailsByLandlordId(landlord.getId());
 
-            // Si no se encontraron Tenants, devolver un mensaje adecuad
+            // Si no se encontraron Tenants, devolver un mensaje adecuado
             if (tenantMails.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("No tenants found for landlord with email: " + landlordMail.getLandlordMail());
@@ -191,11 +192,21 @@ public class PaymentsController {
 
             return ResponseEntity.ok(paymentDTOs);
 
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
+            // Manejo específico de errores
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (DataAccessException e) {
+            // Si hay problemas con el acceso a la base de datos
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al obtener los pagos.");
+                    .body("Error al acceder a la base de datos.");
+        } catch (Exception e) {
+            // Manejo genérico de otros errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error inesperado al obtener los pagos.");
         }
     }
+
 
 
 
