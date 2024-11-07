@@ -1,6 +1,7 @@
 package com.example.practicaClase.controller;
 
 import com.example.practicaClase.exceptions.ResourceNotFoundException;
+import com.example.practicaClase.persintence.DTOs.Landlord.LandlordMailDTO;
 import com.example.practicaClase.persintence.DTOs.Payments.PaymentsForCreation;
 import com.example.practicaClase.persintence.DTOs.Payments.PaymentsResponseDTO;
 import com.example.practicaClase.persintence.DTOs.Payments.TenantMailDTO;
@@ -147,5 +148,57 @@ public class PaymentsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al obtener los pagos.");
         }
     }
+
+    @PostMapping("/payments-by-landlord-mail")
+    public ResponseEntity<?> getPaymentsByLandlordMail(@RequestBody LandlordMailDTO landlordMail) {
+        try {
+            // Buscar el Landlord por su correo electrónico
+            Landlord landlord = landlordRepository.findByMail(landlordMail.getLandlordMail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
+
+            // Obtener los correos electrónicos de los Tenants asociados a ese Landlord
+            List<String> tenantMails = tenantRepository.findTenantMailsByLandlordId(landlord.getId());
+
+            // Si no se encontraron Tenants, devolver un mensaje adecuado
+            if (tenantMails.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No tenants found for landlord with email: " + landlordMail.getLandlordMail());
+            }
+
+            // Buscar los Tenants por sus correos electrónicos
+            List<Tenant> tenants = tenantRepository.findByMailIn(tenantMails);
+
+            // Si no se encontraron Tenants, devolver un mensaje adecuado
+            if (tenants.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No tenants found with the provided emails");
+            }
+
+            // Obtener los pagos asociados a los Tenants encontrados
+            List<Long> tenantIds = tenants.stream().map(Tenant::getId).collect(Collectors.toList());
+            List<Payments> payments = paymentsRepository.findByTenantIdIn(tenantIds);
+
+            // Si no hay pagos, devolver un mensaje adecuado
+            if (payments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No payments found for the provided tenants");
+            }
+
+            // Convertir los pagos encontrados a PaymentsResponseDTO
+            List<PaymentsResponseDTO> paymentDTOs = payments.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(paymentDTOs);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al obtener los pagos.");
+        }
+    }
+
+
+
+
 
 }
