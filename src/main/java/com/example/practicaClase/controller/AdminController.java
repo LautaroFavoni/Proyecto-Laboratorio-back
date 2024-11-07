@@ -46,6 +46,8 @@ public class AdminController {
              //if (!"admin".equals(role)) {
              //    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
              //}
+            //
+
 
             Admin admin = new Admin();
             admin.setMail(dto.getMail());
