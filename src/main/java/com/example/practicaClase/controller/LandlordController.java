@@ -164,7 +164,9 @@ public class LandlordController {
             // Actualizar los campos del Landlord
             landlord.setMail(dto.getMail());
             landlord.setName(dto.getName());
-            landlord.setPassword(passwordEncoder.encode(dto.getPassword()));
+            if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+                landlord.setPassword(passwordEncoder.encode(dto.getPassword()));
+            }
             landlord.setOwner(owner);
             landlord.setPropertyList(properties);
 

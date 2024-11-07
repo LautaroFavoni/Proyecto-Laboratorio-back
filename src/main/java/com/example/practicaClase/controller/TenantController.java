@@ -117,7 +117,9 @@ public class TenantController {
             // Actualizar los campos del Tenant
             tenant.setMail(dto.getMail());
             tenant.setName(dto.getName());
-            tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
+            if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+                tenant.setPassword(passwordEncoder.encode(dto.getPassword()));
+            }
             tenant.setOwner(tenant.getOwner());
             tenant.setProperty(property);
 
@@ -144,48 +146,6 @@ public class TenantController {
     }
 
 
-    // Método DELETE para eliminar un Tenant por ID
-    @Transactional
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTenant(@PathVariable Long id, @RequestHeader("Authorization") String token) {
-        try {
-            // Extraer el rol del token JWT
-            String role = jwtService.extractClaims(token.replace("Bearer ", "")).get("role", String.class);
-
-            // Verificar si el rol es "admin" o "owner"
-            if (!"admin".equals(role) && !"owner".equals(role)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para realizar esta acción.");
-            }
-
-            // Buscar el Tenant a eliminar
-            Tenant tenant = tenantRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
-
-            // Desvincular el Tenant de la Property, si existe
-            Property property = tenant.getProperty();
-            if (property != null) {
-                property.setTenant(null);
-                propertyRepository.save(property); // Guardar los cambios en la Property
-            }
-
-            // Desvincular el Tenant de la lista de Tenants del Owner
-            Owner owner = tenant.getOwner();
-            if (owner != null && owner.getTenantList() != null) {
-                owner.getTenantList().remove(tenant);
-                ownerRepository.save(owner); // Guardar los cambios en el Owner
-            }
-
-            // Eliminar el Tenant de la base de datos
-            tenantRepository.delete(tenant);
-
-            return ResponseEntity.ok("Tenant eliminado correctamente");
-
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el Tenant.");
-        }
-    }
 
 
 }
