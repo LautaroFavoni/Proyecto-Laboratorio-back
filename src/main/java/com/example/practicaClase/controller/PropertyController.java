@@ -55,8 +55,7 @@ public class PropertyController {
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
             Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
-            Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
-                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
+            Owner owner = tenant.getOwner();
 
             Property property = new Property();
             property.setTenant(tenant);
@@ -177,9 +176,7 @@ public class PropertyController {
                     .orElseThrow(() -> new ResourceNotFoundException("Tenant not found"));
             Landlord landlord = landlordRepository.findByMail(dto.getLandlordMail())
                     .orElseThrow(() -> new ResourceNotFoundException("Landlord not found"));
-            Owner owner = ownerRepository.findByMail(dto.getOwnerMail())
-                    .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
-
+            Owner owner = tenant.getOwner();
             // Asigna el tenant y actualiza la referencia en ambas entidades
             property.setTenant(tenant);
             tenant.setProperty(property); // Esto asegura la sincronización de ambas entidades
