@@ -108,6 +108,7 @@ public class OwnerController {
             }
 
             // Buscar el Owner por ID
+
             Owner existingOwner = ownerRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 

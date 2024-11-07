@@ -48,8 +48,9 @@ public class TenantController {
     public ResponseEntity<?> createTenant(@Valid @RequestBody TenantForCreation dto) {
         try {
 
+            long idOwner = 4;
             // Buscar Owner por ID
-            Owner owner = ownerRepository.findById(dto.getOwnerId())
+            Owner owner = ownerRepository.findById(idOwner)
                     .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
             // Buscar Property por ID, permitiendo que la propiedad sea null
