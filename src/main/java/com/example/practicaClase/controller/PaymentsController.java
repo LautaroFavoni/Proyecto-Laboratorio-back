@@ -149,7 +149,7 @@ public class PaymentsController {
         }
     }
 
-    @PostMapping("/payments-by-landlord-mail")
+    @PostMapping("/by-landlord-mail")
     public ResponseEntity<?> getPaymentsByLandlordMail(@RequestBody LandlordMailDTO landlordMail) {
         try {
             // Buscar el Landlord por su correo electrónico
